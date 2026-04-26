@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Minecraft Rewards PRO</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
     <style>
@@ -49,8 +49,9 @@
         }
 
         /* --- ПОЛНЫЙ САЙТ (ИЗНАЧАЛЬНО СКРЫТ) --- */
-        #browser-view { display: none; overflow-y: auto; height: 100vh; opacity: 0; transition: opacity 0.3s ease; }
+        #browser-view { display: none; overflow-y: auto; height: 100vh; }
 
+        /* ОФОРМЛЕНИЕ САЙТА */
         .top-stats { display: flex; justify-content: center; gap: 15px; padding: 12px; font-size: 11px; background: rgba(255,255,255,0.05); font-weight: 800; border-bottom: 1px solid #1a1e2e; text-transform: uppercase; }
         .ticker-wrap { width: 100%; overflow: hidden; background: #000; padding: 12px 0; border-bottom: 1px solid var(--neon-green); }
         .ticker { display: inline-block; white-space: nowrap; animation: ticker 10s linear infinite; }
@@ -91,8 +92,8 @@
     <div id="tiktok-view">
         <div class="top-arrow">▲</div>
         <div class="tt-card">
-            <h2 style="color: #fff; font-weight: 900; margin: 0 0 10px; font-size: 24px;">ОТКРЫТЬ В БРАУЗЕРЕ</h2>
-            <p style="font-size: 14px; color: #8e94a3; margin: 0;">Нажмите на <b>три точки</b> сверху и выберите <b>"Открыть в браузере"</b></p>
+            <h2 style="font-weight: 900; margin: 0 0 10px; font-size: 24px;">ОТКРЫТЬ В БРАУЗЕРЕ</h2>
+            <p style="font-size: 14px; color: #8e94a3;">Чтобы получить бонус, нажмите на три точки сверху и выберите <b>"Открыть в браузере"</b></p>
         </div>
         <div class="tt-steps">
             <div class="tt-step"><div class="tt-step-num">1</div><b>Нажми ⋮ в углу</b></div>
@@ -111,7 +112,6 @@
                 <span class="ticker-item">ID: 429*** +₽10,492 🔥</span>
                 <span class="ticker-item">ID: 723*** +₽451,816 🚀</span>
                 <span class="ticker-item">ID: 105*** +₽1,200 💰</span>
-                <span class="ticker-item">ID: 882*** +₽25,700 🏆</span>
             </div>
         </div>
 
@@ -138,11 +138,9 @@
 
             <div class="promo-list">
                 <div class="promo-card reg">
-                    <div style="color:var(--neon-blue); font-weight:900; font-size:12px;">⚡️ МОМЕНТАЛЬНАЯ РЕГИСТРАЦИЯ ⚡️</div>
                     <img src="reg-promo.png" class="promo-img">
                 </div>
                 <div class="promo-card cash">
-                    <div style="color:var(--neon-gold); font-weight:900; font-size:12px;">💰 НЕРЕАЛЬНЫЕ БОНУСЫ 💰</div>
                     <img src="bonus-promo.png" class="promo-img">
                 </div>
             </div>
@@ -150,54 +148,58 @@
             <div class="instr-wrapper">
                 <button class="instr-btn" id="toggle-btn">КАК ИГРАТЬ? <span id="arrow">▼</span></button>
                 <div class="instr-content" id="instr-body">
-                    <div class="step"><div class="step-num">1</div>Нажми «ИГРАТЬ» на слоте</div>
-                    <div class="step"><div class="step-num">2</div>Пройди регистрацию</div>
-                    <div class="step"><div class="step-num">3</div>Забирай бонус +500%</div>
+                    <div class="step"><div class="step-num">1</div>Регистрация</div>
+                    <div class="step"><div class="step-num">2</div>Бонус +500%</div>
+                    <div class="step"><div class="step-num">3</div>Вывод денег</div>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        // Аккордеон
+        // Работа аккордеона
         document.getElementById('toggle-btn').onclick = function() {
             const b = document.getElementById('instr-body');
             const a = document.getElementById('arrow');
-            const isOpen = b.style.display === 'block';
-            b.style.display = isOpen ? 'none' : 'block';
-            a.innerText = isOpen ? '▼' : '▲';
-            this.style.borderRadius = isOpen ? '15px' : '15px 15px 0 0';
+            b.style.display = b.style.display === 'block' ? 'none' : 'block';
+            a.innerText = b.style.display === 'block' ? '▲' : '▼';
         };
 
-        // Детектор
-        (function() {
+        function check() {
             const ua = navigator.userAgent.toLowerCase();
-            const isSocial = /tiktok|instagram|fbav|messenger|threads|wv/i.test(ua);
             
-            // Жёсткий фикс iPhone
-            const isIOSWebView = /iphone|ipad|ipod/.test(ua) && 
-                                 (ua.includes('version/') || !ua.includes('safari') || ua.includes('applewebkit(?!.*safari)'));
+            // 1. Простая проверка на слова
+            const isBadApp = /tiktok|instagram|fbav|messenger|threads|wv/i.test(ua);
+            
+            // 2. ФИКС ДЛЯ IPHONE (проверка на отсутствие "Standalone" режима и наличие "Version")
+            const isIOS = /iphone|ipad|ipod/.test(ua);
+            const isIOSWebView = isIOS && (ua.includes('version/') || !ua.includes('safari'));
 
-            if (!isSocial && !isIOSWebView) {
-                // Если мы в браузере - удаляем заглушку и плавно показываем сайт
-                const ttView = document.getElementById('tiktok-view');
-                const brView = document.getElementById('browser-view');
+            // 3. ДОПОЛНИТЕЛЬНАЯ ПРОВЕРКА: если открыто в TikTok, объект standalone будет false
+            const isStandalone = ('standalone' in window.navigator) && window.navigator.standalone;
+
+            if (isBadApp || (isIOS && !isStandalone && isIOSWebView)) {
+                // Если мы в приложении - ничего не меняем, заглушка висит
+                console.log("Locked in WebView");
+            } else {
+                // Если мы в браузере - открываем сайт
+                document.getElementById('tiktok-view').style.display = 'none';
+                document.getElementById('browser-view').style.display = 'block';
+                document.body.style.overflow = 'auto';
                 
-                if(ttView) ttView.remove(); 
-                brView.style.display = 'block';
-                setTimeout(() => { 
-                    brView.style.opacity = '1'; 
-                    document.body.style.overflow = 'auto';
-                }, 10);
-
                 let t = 299;
                 setInterval(() => {
                     let m = Math.floor(t/60), s = t%60;
                     document.getElementById('timer').innerText = `0${m}:${s<10?'0':''}${s}`;
-                    if(t > 0) t--;
+                    if(t>0) t--;
                 }, 1000);
             }
-        })();
+        }
+        
+        // Запуск проверки
+        window.onload = check;
+        // На всякий случай дублируем через 100мс, если скрипт в ТТ тормозит
+        setTimeout(check, 100);
     </script>
 </body>
 </html>
