@@ -17,10 +17,13 @@
 
         body { margin: 0; background-color: var(--bg-color); color: #fff; font-family: 'Inter', sans-serif; overflow-x: hidden; -webkit-font-smoothing: antialiased; }
 
-        /* --- ЗАГЛУШКА ТИКТОК (ПО ТВОЕМУ СКРИНУ) --- */
+        /* --- ЗАГЛУШКА ТИКТОК (ФИКСИРОВАННЫЙ СЛОЙ) --- */
         #tiktok-view { 
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: var(--bg-color); z-index: 999999; flex-direction: column; align-items: center; justify-content: center; padding: 20px; box-sizing: border-box;
+            display: none; /* По умолчанию скрыта, включаем только в ТТ */
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--bg-color); z-index: 999999; 
+            flex-direction: column; align-items: center; justify-content: center; 
+            padding: 20px; box-sizing: border-box;
         }
         
         .corner-arrow { position: absolute; top: 15px; right: 20px; font-size: 50px; color: #ffcc00; animation: bounce 0.6s infinite alternate; }
@@ -29,11 +32,12 @@
         .modal-card { background: var(--card-bg); border-radius: 24px; padding: 40px 20px; text-align: center; width: 100%; max-width: 350px; border: 1px solid rgba(255,255,255,0.05); }
         .warning-icon { font-size: 50px; margin-bottom: 20px; }
         .step-item { display: flex; align-items: center; background: rgba(255,255,255,0.03); border-radius: 16px; padding: 14px; margin-bottom: 10px; text-align: left; }
-        .step-num { width: 28px; height: 28px; background: var(--neon-blue); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 900; margin-right: 12px; flex-shrink: 0; font-size: 14px; }
+        .step-num { width: 28px; height: 28px; background: var(--neon-blue); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 900; margin-right: 12px; flex-shrink: 0; font-size: 14px; color: #fff; }
         .step-text { font-size: 13px; font-weight: 600; color: #efefff; }
 
         /* --- ТВОЙ ДИЗАЙН САЙТА --- */
-        #browser-view { display: none; }
+        #browser-view { display: block; } /* ВСЕГДА ВИДИМ ПО УМОЛЧАНИЮ */
+
         .top-stats { display: flex; justify-content: center; gap: 15px; padding: 12px; font-size: 11px; background: rgba(255,255,255,0.05); font-weight: 800; border-bottom: 1px solid #1a1e2e; text-transform: uppercase; letter-spacing: 1px; }
         .ticker-wrap { width: 100%; overflow: hidden; background: #000; padding: 12px 0; border-bottom: 1px solid var(--neon-green); }
         .ticker { display: inline-block; white-space: nowrap; animation: ticker 10s linear infinite; }
@@ -80,7 +84,7 @@
         <div class="modal-card">
             <div class="warning-icon">⚠️</div>
             <h1 style="font-weight:900;">Открыть в браузере</h1>
-            <p style="color:var(--text-gray); font-size:14px; margin-bottom:20px;">Нажмите на <b>три точки (⋮)</b> в углу и выберите <b>«Открыть в Safari/Браузере»</b></p>
+            <p style="color:var(--text-gray); font-size:14px; margin-bottom:20px;">Нажмите на <b>три точки (⋮)</b> в углу и выберите <b>«Открыть в Safari»</b></p>
             <div class="step-item"><div class="step-num">1</div><div class="step-text">Нажмите на три точки (⋮)</div></div>
             <div class="step-item"><div class="step-num">2</div><div class="step-text">Выберите «Открыть в браузере»</div></div>
             <div class="step-item"><div class="step-num">3</div><div class="step-text">Забирайте бонус 25 000 RUB</div></div>
@@ -99,7 +103,6 @@
                 <span class="ticker-item">ID: 723*** +₽451,816 🚀</span>
                 <span class="ticker-item">ID: 105*** +₽1,200 💰</span>
                 <span class="ticker-item">ID: 882*** +₽25,700 🏆</span>
-                <span class="ticker-item">ID: 429*** +₽10,492 🔥</span>
             </div>
         </div>
 
@@ -108,39 +111,33 @@
                 <div class="game-card mineslot">
                     <img src="mineslot.jpg">
                     <div class="game-name" style="color: var(--neon-gold);">MINESLOT</div>
-                    <a href="ТВОЯ_ССЫЛКА_1" class="play-btn btn-green">ИГРАТЬ</a>
+                    <a href="URL1" class="play-btn btn-green">ИГРАТЬ</a>
                 </div>
                 <div class="game-card doodle">
                     <img src="jumper.jpg">
                     <div class="game-name" style="color: var(--neon-red);">DOODLE JUMP</div>
-                    <a href="ТВОЯ_ССЫЛКА_2" class="play-btn btn-red">ИГРАТЬ</a>
+                    <a href="URL2" class="play-btn btn-red">ИГРАТЬ</a>
                 </div>
             </div>
 
-            <a href="ТВОЯ_ССЫЛКА_БОНУС" class="bonus-btn">
+            <a href="URL_BONUS" class="bonus-btn">
                 <div class="bonus-bait">🔥 ЛИМИТИРОВАННОЕ ПРЕДЛОЖЕНИЕ 🔥</div>
                 <span class="bonus-amount">25 000 RUB</span>
-                <div style="font-size: 12px; font-weight: 700;">ИСТЕКАЕТ ЧЕРЕЗ: <span id="timer" style="color: var(--neon-red); font-weight: 900;">04:59</span></div>
+                <div style="font-size: 12px;">ИСТЕКАЕТ ЧЕРЕЗ: <span id="timer" style="color: var(--neon-red); font-weight: 900;">04:59</span></div>
                 <span class="bonus-call">⚡️ ЗАБРАТЬ МОЙ БОНУС ⚡️</span>
             </a>
 
             <div class="promo-list">
-                <div class="promo-card reg">
-                    <div class="promo-text" style="color: var(--neon-blue);">⚡️ МОМЕНТАЛЬНАЯ РЕГИСТРАЦИЯ ⚡️</div>
-                    <img src="reg-promo.png" class="promo-img">
-                </div>
-                <div class="promo-card cash">
-                    <div class="promo-text" style="color: var(--neon-gold);">💰 НЕРЕАЛЬНЫЕ БОНУСЫ 💰</div>
-                    <img src="bonus-promo.png" class="promo-img">
-                </div>
+                <div class="promo-card reg"><img src="reg-promo.png" class="promo-img"></div>
+                <div class="promo-card cash"><img src="bonus-promo.png" class="promo-img"></div>
             </div>
 
             <div class="instr-wrapper">
                 <button class="instr-btn" onclick="toggleInstr()">КАК ИГРАТЬ? <span id="arrow">▼</span></button>
                 <div class="instr-content" id="instr-body">
-                    <div class="step"><div class="step-num-site">1</div><div>Нажми кнопку «ИГРАТЬ»</div></div>
+                    <div class="step"><div class="step-num-site">1</div><div>Нажми «ИГРАТЬ»</div></div>
                     <div class="step"><div class="step-num-site">2</div><div>Пройди регистрацию</div></div>
-                    <div class="step"><div class="step-num-site">3</div><div>Забери свой кэш!</div></div>
+                    <div class="step"><div class="step-num-site">3</div><div>Забирай кэш</div></div>
                 </div>
             </div>
         </div>
@@ -149,27 +146,28 @@
     <script>
         function toggleInstr() {
             const b = document.getElementById('instr-body');
-            const a = document.getElementById('arrow');
-            const open = b.style.display === 'block';
-            b.style.display = open ? 'none' : 'block';
-            a.innerText = open ? '▼' : '▲';
+            b.style.display = b.style.display === 'block' ? 'none' : 'block';
         }
 
         (function init() {
-            const ua = navigator.userAgent.toLowerCase();
-            const isTikTok = ua.includes("tiktok");
+            try {
+                const ua = navigator.userAgent.toLowerCase();
+                const isTikTok = ua.indexOf("tiktok") > -1;
 
-            if (isTikTok) {
-                document.getElementById('tiktok-view').style.display = 'flex';
-            } else {
-                document.getElementById('browser-view').style.display = 'block';
+                if (isTikTok) {
+                    // Только если это ТТ, перекрываем сайт заглушкой
+                    document.getElementById('tiktok-view').style.display = 'flex';
+                    document.body.style.overflow = 'hidden';
+                }
+
+                // Таймер запускаем в любом случае
                 let time = 299;
                 setInterval(() => {
                     let m = Math.floor(time/60), s = time%60;
                     document.getElementById('timer').innerText = `0${m}:${s<10?'0':''}${s}`;
                     if(time > 0) time--;
                 }, 1000);
-            }
+            } catch(e) { console.log(e); }
         })();
     </script>
 </body>
