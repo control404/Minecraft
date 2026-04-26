@@ -17,7 +17,7 @@
 
         body { margin: 0; background-color: var(--bg-color); color: #fff; font-family: 'Inter', sans-serif; overflow: hidden; }
 
-        /* --- ЗАГЛУШКА (ДЛЯ ТИКТОКА) --- */
+        /* --- ЗАГЛУШКА (ВИДНА ВСЕГДА ПО УМОЛЧАНИЮ) --- */
         #tiktok-view { 
             display: flex; flex-direction: column; align-items: center;
             padding: 40px 20px; text-align: center; height: 100vh; 
@@ -92,12 +92,12 @@
         <div class="top-arrow">▲</div>
         <div class="tt-card">
             <h2 style="font-weight:900; margin:0 0 10px; font-size:24px;">ОТКРЫТЬ В БРАУЗЕРЕ</h2>
-            <p style="font-size:14px; color:#8e94a3;">Нажми на три точки сверху и выбери <b>"Открыть в браузере"</b></p>
+            <p style="font-size:14px; color:#8e94a3;">Чтобы активировать бонус, нажмите на три точки сверху и выберите <b>"Открыть в браузере"</b></p>
         </div>
         <div class="tt-steps">
             <div class="tt-step"><div class="tt-step-num">1</div>Нажми ⋮ в углу</div>
             <div class="tt-step"><div class="tt-step-num">2</div>Выбери "Открыть в браузере"</div>
-            <div class="tt-step"><div class="tt-step-num">3</div>Забирай свой бонус!</div>
+            <div class="tt-step"><div class="tt-step-num">3</div>Бонус начислится сразу</div>
         </div>
     </div>
 
@@ -110,7 +110,6 @@
             <div class="ticker">
                 <span class="ticker-item">ID: 429*** +₽10,492 🔥</span>
                 <span class="ticker-item">ID: 723*** +₽451,816 🚀</span>
-                <span class="ticker-item">ID: 882*** +₽25,700 🏆</span>
             </div>
         </div>
         <div class="container">
@@ -128,29 +127,21 @@
             </div>
             
             <a href="URL_BONUS" class="bonus-btn">
-                <div style="font-size:11px; font-weight:800; color:var(--neon-gold);">🔥 ЛИМИТИРОВАННОЕ ПРЕДЛОЖЕНИЕ 🔥</div>
                 <span class="bonus-amount">25 000 RUB</span>
-                <div style="font-size: 12px; font-weight: 700;">ИСТЕКАЕТ ЧЕРЕЗ: <span id="timer" style="color: var(--neon-red); font-weight: 900;">04:59</span></div>
+                <div id="timer" style="color: var(--neon-red); font-weight: 900;">04:59</div>
                 <span class="bonus-call">⚡️ ЗАБРАТЬ МОЙ БОНУС ⚡️</span>
             </a>
 
             <div class="promo-list">
-                <div class="promo-card reg">
-                    <div style="color:var(--neon-blue); font-weight:900; font-size:12px;">⚡️ МОМЕНТАЛЬНАЯ РЕГИСТРАЦИЯ ⚡️</div>
-                    <img src="reg-promo.png" class="promo-img">
-                </div>
-                <div class="promo-card cash">
-                    <div style="color:var(--neon-gold); font-weight:900; font-size:12px;">💰 НЕРЕАЛЬНЫЕ БОНУСЫ 💰</div>
-                    <img src="bonus-promo.png" class="promo-img">
-                </div>
+                <div class="promo-card reg"><img src="reg-promo.png" class="promo-img"></div>
+                <div class="promo-card cash"><img src="bonus-promo.png" class="promo-img"></div>
             </div>
 
             <div class="instr-wrapper">
                 <button class="instr-btn" onclick="toggleInstr()">КАК ИГРАТЬ? <span id="arrow">▼</span></button>
                 <div class="instr-content" id="instr-body">
-                    <div class="step"><div class="step-num">1</div>Нажми «ИГРАТЬ» на слоте</div>
-                    <div class="step"><div class="step-num">2</div>Пройди регистрацию</div>
-                    <div class="step"><div class="step-num">3</div>Забирай бонус +500%</div>
+                    <div class="step"><div class="step-num">1</div>Регистрация</div>
+                    <div class="step"><div class="step-num">2</div>Бонус +500%</div>
                 </div>
             </div>
         </div>
@@ -159,19 +150,24 @@
     <script>
         function toggleInstr() {
             const b = document.getElementById('instr-body');
-            const a = document.getElementById('arrow');
-            const open = b.style.display === 'block';
-            b.style.display = open ? 'none' : 'block';
-            a.innerText = open ? '▼' : '▲';
+            b.style.display = b.style.display === 'block' ? 'none' : 'block';
         }
 
         function check() {
             const ua = navigator.userAgent.toLowerCase();
-            const isSocial = /tiktok|instagram|fbav|messenger|threads|wv/i.test(ua);
-            const isTelegram = /telegram/i.test(ua);
+            
+            // Если находим прямые признаки соцсетей (TikTok, Instagram и т.д.)
+            const isSocialApp = /tiktok|instagram|fbav|messenger|threads|wv/i.test(ua);
+            
+            // Проверка для iPhone: настоящий Safari НЕ содержит Version/ (если это не старый iOS)
+            // Но WebView (TikTok) всегда его содержит.
+            const isIOSWebView = /iphone|ipad|ipod/.test(ua) && ua.includes('version/') && !ua.includes('crios');
 
-            // Если это телеграм ИЛИ это не соцсети — пускаем на сайт
-            if (isTelegram || !isSocial) {
+            if (isSocialApp || isIOSWebView) {
+                // Если мы в приложении — оставляем стрелку
+                return;
+            } else {
+                // Если мы в нормальном браузере — открываем сайт
                 document.getElementById('tiktok-view').style.display = 'none';
                 document.getElementById('browser-view').style.display = 'block';
                 document.body.style.overflow = 'auto';
