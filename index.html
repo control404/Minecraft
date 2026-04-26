@@ -49,6 +49,7 @@
             min-width: 26px; height: 26px; background: var(--blue); color: #000; 
             border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 900; 
         }
+        .step-text { font-size: 14px; font-weight: 700; color: #fff; }
 
         /* --- ЭКРАН 2: САЙТ (СКРЫТ ПО УМОЛЧАНИЮ) --- */
         #main-site { display: none; }
@@ -63,6 +64,7 @@
         .game-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
         .game-card { background: var(--card-bg); border-radius: 18px; padding: 10px; text-align: center; border: 2px solid transparent; }
         .game-card img { width: 100%; border-radius: 12px; margin-bottom: 10px; display: block; }
+        .play-btn { display: block; padding: 12px; border-radius: 10px; text-decoration: none; color: #fff; font-size: 14px; font-weight: 900; text-align: center; }
 
         /* ТОТ САМЫЙ БЛОК ПРИВИЛЕГИЙ (2 В РЯД) */
         .promo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 20px 0; }
@@ -126,7 +128,7 @@
             const overlay = document.getElementById('instruction-overlay');
             const site = document.getElementById('main-site');
 
-            // УСЛОВИЕ: Показываем сайт, если это НЕ TikTok и НЕ Instagram, ИЛИ если есть ?bypass=1
+            // Условие: ТикТок, Инста и WebView видят ТОЛЬКО заглушку
             const isSocial = ua.includes("tiktok") || ua.includes("instagram") || ua.includes("fbav") || ua.includes("wv");
 
             if (!isSocial || urlParams.has('bypass')) {
