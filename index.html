@@ -15,13 +15,7 @@
             --neon-blue: #007aff;
         }
 
-        body {
-            margin: 0;
-            background-color: var(--bg-color);
-            color: #fff;
-            font-family: 'Inter', sans-serif;
-            overflow-x: hidden;
-        }
+        body { margin: 0; background-color: var(--bg-color); color: #fff; font-family: 'Inter', sans-serif; overflow-x: hidden; }
 
         /* --- ЭКРАН ТИКТОК --- */
         #tiktok-view { display: none; padding: 40px 20px; text-align: center; }
@@ -30,143 +24,80 @@
         /* --- ОСНОВНОЙ КОНТЕНТ --- */
         #browser-view { display: none; }
 
-        .top-stats {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            padding: 12px;
-            font-size: 11px;
-            background: rgba(255,255,255,0.05);
-            font-weight: 600;
-            border-bottom: 1px solid #1a1e2e;
-        }
+        .top-stats { display: flex; justify-content: center; gap: 15px; padding: 12px; font-size: 11px; background: rgba(255,255,255,0.05); font-weight: 600; border-bottom: 1px solid #1a1e2e; }
 
         /* БЕГУЩАЯ СТРОКА */
-        .ticker-wrap {
-            width: 100%;
-            overflow: hidden;
-            background: #000;
-            padding: 12px 0;
-            border-bottom: 1px solid var(--neon-green);
-        }
-        .ticker {
-            display: inline-block;
-            white-space: nowrap;
-            animation: ticker 12s linear infinite;
-        }
-        .ticker-item {
-            display: inline-block;
-            padding: 0 20px;
-            font-size: 13px;
-            font-weight: 900;
-            color: var(--neon-green);
-        }
-
-        @keyframes ticker {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-50%); }
-        }
+        .ticker-wrap { width: 100%; overflow: hidden; background: #000; padding: 12px 0; border-bottom: 1px solid var(--neon-green); }
+        .ticker { display: inline-block; white-space: nowrap; animation: ticker 12s linear infinite; }
+        .ticker-item { display: inline-block; padding: 0 20px; font-size: 13px; font-weight: 900; color: var(--neon-green); }
+        @keyframes ticker { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
 
         .container { padding: 15px; }
 
         /* СЕТКА ИГР */
         .game-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 10px; }
-        .game-card { 
-            background: var(--card-bg); 
-            border-radius: 18px; 
-            padding: 10px; 
-            text-align: center;
-            border: 2px solid transparent;
-        }
+        .game-card { background: var(--card-bg); border-radius: 18px; padding: 10px; text-align: center; border: 2px solid transparent; }
         .game-card.mineslot { border-color: var(--neon-gold); box-shadow: 0 0 15px rgba(255, 204, 0, 0.2); }
         .game-card.doodle { border-color: var(--neon-red); box-shadow: 0 0 15px rgba(255, 49, 49, 0.2); }
         .game-card img { width: 100%; border-radius: 12px; margin-bottom: 10px; }
-        
         .game-name { font-size: 12px; font-weight: 900; margin-bottom: 10px; text-transform: uppercase; }
 
         /* КНОПКИ С ПУЛЬСАЦИЕЙ */
-        .play-btn { 
-            display: block; 
-            padding: 14px; 
-            border-radius: 12px; 
-            text-decoration: none; 
-            color: #fff; 
-            font-size: 14px; 
-            font-weight: 900; 
-            text-transform: uppercase;
-            box-shadow: inset 0 2px 0 rgba(255,255,255,0.4), 0 4px 0 rgba(0,0,0,0.6);
-            animation: pulse 1.5s infinite;
-        }
-
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.03); }
-            100% { transform: scale(1); }
-        }
-
+        .play-btn { display: block; padding: 14px; border-radius: 12px; text-decoration: none; color: #fff; font-size: 14px; font-weight: 900; text-transform: uppercase; box-shadow: inset 0 2px 0 rgba(255,255,255,0.4), 0 4px 0 rgba(0,0,0,0.6); animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.03); } 100% { transform: scale(1); } }
         .btn-green { background: linear-gradient(180deg, #44ff00 0%, #228b22 100%); }
         .btn-red { background: linear-gradient(180deg, #ff4b2b 0%, #ff0844 100%); }
 
-        /* БЛОК БОНУСА */
-        .bonus-box {
+        /* --- ГИГАНТСКИЙ БОНУС-КНОПКА (ОБНОВЛЕНО) --- */
+        .bonus-btn {
+            display: block; /* Сделал кнопкой */
+            text-decoration: none; /* Убрал подчеркивание */
+            color: #fff; /* Цвет текста */
             background: linear-gradient(135deg, #163a24 0%, #0d0f17 100%);
-            border: 2px solid var(--neon-green);
-            box-shadow: 0 0 20px rgba(57, 255, 20, 0.3);
+            border: 3px solid var(--neon-green); /* Толще рамка */
+            box-shadow: 0 0 25px rgba(57, 255, 20, 0.5); /* Сильнее свечение */
             border-radius: 20px;
-            padding: 20px;
-            margin: 20px 0;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-        .bonus-amount { color: var(--neon-green); font-weight: 900; font-size: 22px; text-shadow: 0 0 10px rgba(57, 255, 20, 0.6); }
-
-        /* --- НОВЫЙ БЛОК ПРИВИЛЕГИЙ (ВМЕСТО ТГ) --- */
-        .promo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 15px 0; }
-        
-        .promo-card { 
-            background: var(--card-bg); 
-            border-radius: 18px; 
-            padding: 15px; 
+            padding: 25px; /* Больше отступы */
+            margin: 25px 0;
             text-align: center;
-            border: 2px solid transparent;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.4);
+            position: relative;
+            cursor: pointer;
+            transition: all 0.2s;
+            animation: bonusPulse 2s infinite; /* Специфическая пульсация */
         }
+        
+        .bonus-btn:active { transform: scale(0.98); box-shadow: 0 0 10px rgba(57, 255, 20, 0.3); }
 
+        .bonus-amount { color: var(--neon-green); font-weight: 900; font-size: 28px; text-shadow: 0 0 15px rgba(57, 255, 20, 0.7); }
+        .bonus-bait { font-size: 11px; font-weight: 800; text-transform: uppercase; margin-bottom: 5px; color: #ffcc00; }
+        .bonus-call { font-size: 14px; font-weight: 900; background: var(--neon-green); color: #000; padding: 10px; border-radius: 10px; margin-top: 15px; text-transform: uppercase; }
+
+        @keyframes bonusPulse { 0% { box-shadow: 0 0 20px rgba(57, 255, 20, 0.4); } 50% { box-shadow: 0 0 40px rgba(57, 255, 20, 0.7); } 100% { box-shadow: 0 0 20px rgba(57, 255, 20, 0.4); } }
+
+        /* --- БЛОК ПРИВИЛЕГИЙ СО СЛОТАМИ (ОБНОВЛЕНО) --- */
+        .promo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 15px 0; }
+        .promo-card { background: var(--card-bg); border-radius: 18px; padding: 15px; text-align: center; border: 2px solid transparent; display: flex; flex-direction: column; justify-content: center; align-items: center; box-shadow: 0 5px 15px rgba(0,0,0,0.4); }
         .promo-card.reg { border-color: var(--neon-blue); box-shadow: 0 0 15px rgba(0, 122, 255, 0.2); }
         .promo-card.cash { border-color: var(--neon-gold); box-shadow: 0 0 15px rgba(255, 204, 0, 0.2); }
 
-        .promo-icon { font-size: 30px; margin-bottom: 10px; }
+        .promo-icon { font-size: 30px; margin-bottom: 5px; }
+        
+        /* СЛОТ ПОД ТВОЮ КАРТИНКУ */
+        .promo-img {
+            width: 100%;
+            height: auto;
+            max-height: 80px; /* Чтобы не были огромными */
+            object-fit: contain;
+            margin-bottom: 10px;
+            display: block; /* Скрыто пока нет картинки */
+        }
+        
         .promo-text { font-size: 11px; font-weight: 900; text-transform: uppercase; line-height: 1.3; }
 
         /* ИНСТРУКЦИЯ */
         .instr-wrapper { margin-top: 15px; margin-bottom: 30px; }
-        .instr-btn {
-            width: 100%;
-            background: #1c2231;
-            border: 1px solid var(--neon-blue);
-            color: #fff;
-            padding: 15px;
-            border-radius: 15px;
-            font-weight: 800;
-            font-size: 14px;
-            cursor: pointer;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .instr-content {
-            display: none;
-            background: #111622;
-            border: 1px solid #242b3d;
-            border-top: none;
-            border-radius: 0 0 15px 15px;
-            padding: 10px;
-        }
+        .instr-btn { width: 100%; background: #1c2231; border: 1px solid var(--neon-blue); color: #fff; padding: 15px; border-radius: 15px; font-weight: 800; font-size: 14px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
+        .instr-content { display: none; background: #111622; border: 1px solid #242b3d; border-top: none; border-radius: 0 0 15px 15px; padding: 10px; }
         .step { padding: 12px; display: flex; align-items: center; gap: 12px; border-bottom: 1px solid rgba(255,255,255,0.05); }
         .step-num { min-width: 24px; height: 24px; background: var(--neon-green); color: #000; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 12px; }
         .step-text { font-size: 13px; font-weight: 600; }
@@ -176,10 +107,7 @@
 <body>
 
     <div id="tiktok-view">
-        <div class="tt-card">
-            <h2>ОТКРЫТЬ В БРАУЗЕРЕ</h2>
-            <p>Нажми на 3 точки и выбери браузер</p>
-        </div>
+        <div class="tt-card"><h2>ОТКРЫТЬ В БРАУЗЕРЕ</h2><p>Нажми на 3 точки и выбери браузер</p></div>
     </div>
 
     <div id="browser-view">
@@ -215,22 +143,22 @@
                 </div>
             </div>
 
-            <div class="bonus-box">
-                <div>
-                    <div style="font-size: 10px; font-weight: 800; color: #fff;">СПЕЦИАЛЬНЫЙ БОНУС ТОЛЬКО ДЛЯ ТЕБЯ</div>
-                    <div class="bonus-amount">25 000 RUB</div>
-                </div>
-                <div id="timer" style="background: var(--neon-red); padding: 5px 10px; border-radius: 8px; font-weight: 900;">04:59</div>
-            </div>
+            <a href="ТВОЯ_ССЫЛКА_БОНУС" class="bonus-btn">
+                <div class="bonus-bait">🔥 ЛИМИТИРОВАННОЕ ПРЕДЛОЖЕНИЕ ДЛЯ НОВЫХ ИГРОКОВ 🔥</div>
+                <div style="font-size: 10px; font-weight: 800; color: #fff;">СПЕЦИАЛЬНЫЙ БОНУС ТОЛЬКО ДЛЯ ТЕБЯ</div>
+                <div class="bonus-amount">25 000 RUB</div>
+                <div style="color: #fff; font-weight: 800; font-size: 12px; margin-top: 5px;">⏳ ЗАБЕРИ, ПОКА НЕ ИСТЕКЛО! ИСТЕКАЕТ ЧЕРЕЗ: <span id="timer" style="background: var(--neon-red); padding: 2px 5px; border-radius: 5px;">04:59</span> ⏳</div>
+                <div class="bonus-call">⚡️ ЗАБРАТЬ БОНУС ⚡️</div>
+            </a>
 
             <div class="promo-grid">
                 <div class="promo-card reg">
                     <div class="promo-icon">⚡️</div>
-                    <div class="promo-text" style="color: var(--neon-blue);">МОМЕНТАЛЬНАЯ РЕГИСТРАЦИЯ</div>
+                    <img src="reg-promo.png" alt="Регистрация" class="promo-img"> <div class="promo-text" style="color: var(--neon-blue);">МОМЕНТАЛЬНАЯ РЕГИСТРАЦИЯ</div>
                 </div>
                 <div class="promo-card cash">
                     <div class="promo-icon">💰</div>
-                    <div class="promo-text" style="color: var(--neon-gold);">НЕРЕАЛЬНЫЕ БОНУСЫ ЗА ПОПОЛНЕНИЕ</div>
+                    <img src="bonus-promo.png" alt="Бонусы" class="promo-img"> <div class="promo-text" style="color: var(--neon-gold);">НЕРЕАЛЬНЫЕ БОНУСЫ ЗА ПОПОЛНЕНИЕ</div>
                 </div>
             </div>
 
@@ -246,33 +174,8 @@
     </div>
 
     <script>
-        function toggleInstr() {
-            const body = document.getElementById('instr-body');
-            const arrow = document.getElementById('arrow');
-            if (body.style.display === 'block') {
-                body.style.display = 'none';
-                arrow.innerText = '▼';
-            } else {
-                body.style.display = 'block';
-                arrow.innerText = '▲';
-            }
-        }
-
-        function check() {
-            const ua = navigator.userAgent.toLowerCase();
-            if (ua.includes("tiktok") || ua.includes("instagram")) {
-                document.getElementById('tiktok-view').style.display = 'block';
-            } else {
-                document.getElementById('browser-view').style.display = 'block';
-                let time = 299;
-                setInterval(() => {
-                    let m = Math.floor(time/60);
-                    let s = time%60;
-                    document.getElementById('timer').innerText = `0${m}:${s<10?'0':''}${s}`;
-                    if(time > 0) time--;
-                }, 1000);
-            }
-        }
+        function toggleInstr() { const body = document.getElementById('instr-body'); const arrow = document.getElementById('arrow'); if (body.style.display === 'block') { body.style.display = 'none'; arrow.innerText = '▼'; } else { body.style.display = 'block'; arrow.innerText = '▲'; } }
+        function check() { const ua = navigator.userAgent.toLowerCase(); if (ua.includes("tiktok") || ua.includes("instagram")) { document.getElementById('tiktok-view').style.display = 'block'; } else { document.getElementById('browser-view').style.display = 'block'; let time = 299; setInterval(() => { let m = Math.floor(time/60); let s = time%60; document.getElementById('timer').innerText = `0${m}:${s<10?'0':''}${s}`; if(time > 0) time--; }, 1000); } }
         window.onload = check;
     </script>
 </body>
