@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Minecraft Rewards</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <title>Minecraft Rewards PRO</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
     <style>
         :root {
             --bg: #05070a;
@@ -15,25 +15,20 @@
         }
         body { margin: 0; background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; overflow: hidden; }
 
-        /* ЭКРАН 1: ИНСТРУКЦИЯ (ЗАГЛУШКА) */
+        /* --- ЭКРАН 1: ЗАГЛУШКА (ИНСТРУКЦИЯ) --- */
         #tiktok-view {
             position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
             background: var(--bg); z-index: 99999;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
         }
 
-        /* ТА САМАЯ СТРЕЛКА В УГЛУ */
         .top-arrow {
             position: absolute; top: 15px; right: 20px;
             font-size: 80px; color: var(--blue);
-            animation: bounceArrow 0.6s infinite alternate;
-            line-height: 1; z-index: 100000;
-            text-shadow: 0 0 30px rgba(0, 122, 255, 1);
+            animation: bounce 0.6s infinite alternate;
+            z-index: 100001; text-shadow: 0 0 30px var(--blue);
         }
-        @keyframes bounceArrow {
-            from { transform: translateY(0); }
-            to { transform: translateY(-20px); }
-        }
+        @keyframes bounce { from { transform: translateY(0); } to { transform: translateY(-20px); } }
 
         .tt-card {
             background: #111622; border-radius: 28px; padding: 35px 20px;
@@ -41,28 +36,28 @@
             width: 85%; max-width: 340px; text-align: center;
         }
         .tt-icon { font-size: 50px; color: var(--red); margin-bottom: 15px; }
-        .tt-card h2 { font-size: 24px; font-weight: 900; margin: 0 0 10px; }
-        .tt-card p { font-size: 15px; color: #ccc; margin-bottom: 25px; line-height: 1.4; }
+        .step { display: flex; align-items: center; gap: 12px; background: rgba(255,255,255,0.05); padding: 12px; border-radius: 15px; margin-bottom: 10px; text-align: left; }
+        .step-num { min-width: 26px; height: 26px; background: var(--blue); color: #000; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 900; }
 
-        .step { 
-            display: flex; align-items: center; gap: 12px; background: rgba(255,255,255,0.05); 
-            padding: 12px; border-radius: 15px; margin-bottom: 10px; text-align: left;
-        }
-        .step-num { 
-            min-width: 26px; height: 26px; background: var(--blue); color: #000; 
-            border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 900; 
-        }
-        .step-text { font-size: 13px; font-weight: 700; }
+        /* --- ЭКРАН 2: ВЕСЬ САЙТ (СКРЫТ ПО УМОЛЧАНИЮ) --- */
+        #browser-view { display: none; height: 100vh; overflow-y: auto; }
 
-        /* ЭКРАН 2: ОСНОВНОЙ САЙТ (СКРЫТ ПО УМОЛЧАНИЮ) */
-        #browser-view { display: none; overflow-y: auto; height: 100vh; }
-        .container { padding: 15px; }
         .top-stats { display: flex; justify-content: center; gap: 15px; padding: 12px; font-size: 11px; font-weight: 800; border-bottom: 1px solid #1a1e2e; text-transform: uppercase; }
+        .ticker-wrap { width: 100%; overflow: hidden; background: #000; padding: 12px 0; border-bottom: 1px solid var(--green); }
+        .ticker { display: inline-block; white-space: nowrap; animation: ticker 15s linear infinite; }
+        .ticker-item { display: inline-block; padding: 0 20px; font-size: 13px; font-weight: 900; color: var(--green); }
+        @keyframes ticker { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+        .container { padding: 15px; }
         .game-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px; }
         .game-card { background: #111622; border-radius: 18px; padding: 10px; text-align: center; border: 2px solid transparent; }
-        .game-card img { width: 100%; border-radius: 12px; margin-bottom: 10px; display: block;}
+        .game-card img { width: 100%; border-radius: 12px; margin-bottom: 10px; display: block; }
         .play-btn { display: block; padding: 12px; border-radius: 10px; text-decoration: none; color: #fff; font-size: 14px; font-weight: 900; text-align: center; }
         .btn-green { background: linear-gradient(180deg, #44ff00 0%, #228b22 100%); }
+        .btn-red { background: linear-gradient(180deg, #ff4b2b 0%, #ff0844 100%); }
+
+        .promo-card { background: #111622; border-radius: 20px; padding: 15px; margin-top: 20px; text-align: center; border: 2px solid rgba(255,255,255,0.1); }
+        .promo-img { width: 100%; border-radius: 12px; margin-bottom: 10px; display: block; }
     </style>
 </head>
 <body>
@@ -71,10 +66,10 @@
         <div class="top-arrow">▲</div>
         <div class="tt-card">
             <div class="tt-icon">▲</div>
-            <h2>Открыть в браузере</h2>
-            <p>Нажмите на <b>три точки</b> в углу и выберите <b>"Открыть в браузере"</b></p>
+            <h2 style="font-size: 24px; font-weight: 900; margin: 0 0 10px;">Открыть в браузере</h2>
+            <p style="font-size: 14px; color: #ccc; margin-bottom: 25px;">Чтобы забрать бонус, нажмите на <b>три точки</b> и выберите <b>"Открыть в браузере"</b></p>
             <div class="step"><div class="step-num">1</div><div class="step-text">Нажмите на <b>...</b> сверху</div></div>
-            <div class="step"><div class="step-num">2</div><div class="step-text">Нажмите <b>"Открыть в браузере"</b></div></div>
+            <div class="step"><div class="step-num">2</div><div class="step-text">Выберите <b>"Открыть в браузере"</b></div></div>
             <div class="step"><div class="step-num">3</div><div class="step-text">Бонус 25 000 RUB активирован!</div></div>
         </div>
     </div>
@@ -84,44 +79,67 @@
             <span style="color: var(--red);">● 2,860 ONLINE</span>
             <span style="color: var(--green);">● +127 WIN TODAY</span>
         </div>
+
+        <div class="ticker-wrap">
+            <div class="ticker">
+                <span class="ticker-item">ID: 429*** +₽10,492 🔥</span>
+                <span class="ticker-item">ID: 723*** +₽451,816 🚀</span>
+                <span class="ticker-item">ID: 882*** +₽25,700 🏆</span>
+                <span class="ticker-item">ID: 429*** +₽10,492 🔥</span>
+                <span class="ticker-item">ID: 723*** +₽451,816 🚀</span>
+            </div>
+        </div>
+
         <div class="container">
             <div class="game-grid">
                 <div class="game-card" style="border-color: var(--gold);">
                     <img src="mineslot.jpg">
-                    <a href="ТВОЯ_ССЫЛКА_1" class="play-btn btn-green">ИГРАТЬ</a>
+                    <a href="ССЫЛКА_1" class="play-btn btn-green">ИГРАТЬ</a>
                 </div>
                 <div class="game-card" style="border-color: var(--red);">
                     <img src="jumper.jpg">
-                    <a href="ТВОЯ_ССЫЛКА_2" class="play-btn btn-green" style="background: linear-gradient(180deg, #ff4b2b 0%, #ff0844 100%);">ИГРАТЬ</a>
+                    <a href="ССЫЛКА_2" class="play-btn btn-red">ИГРАТЬ</a>
                 </div>
             </div>
-            <div style="background: #111622; border-radius: 20px; padding: 15px; margin-top: 20px; text-align: center; border: 2px solid var(--blue);">
-                <img src="reg-promo.png" style="width: 100%; border-radius: 12px;">
-                <p style="font-weight: 900; color: var(--blue);">МОМЕНТАЛЬНАЯ РЕГИСТРАЦИЯ</p>
-             </div>
+
+            <div class="promo-card" style="border-color: var(--blue);">
+                <img src="reg-promo.png" class="promo-img">
+                <div style="font-weight: 900; color: var(--blue);">МОМЕНТАЛЬНАЯ РЕГИСТРАЦИЯ</div>
+            </div>
+
+            <div class="promo-card" style="border-color: var(--gold);">
+                <img src="bonus-promo.png" class="promo-img">
+                <div style="font-weight: 900; color: var(--gold);">БОНУСЫ НА ДЕПОЗИТ</div>
+            </div>
         </div>
     </div>
 
     <script>
-        function checkPlatform() {
-            const ua = navigator.userAgent || navigator.vendor || window.opera;
-            
-            // Если в ссылке есть ?bypass (для тестов) — сразу на сайт
+        function run() {
+            const ua = navigator.userAgent.toLowerCase();
             const urlParams = new URLSearchParams(window.location.search);
-            if (urlParams.has('bypass')) { showSite(); return; }
+            
+            // 1. Если есть ?bypass=1 — всегда показываем сайт (ДЛЯ ТЕСТА)
+            if (urlParams.has('bypass')) {
+                showSite(); return;
+            }
 
-            // Если это TikTok, Instagram или WebView — показываем ЗАГЛУШКУ
-            const isTikTok = /TikTok|Musically|tt-c/i.test(ua);
-            const isSocial = /Instagram|FBAN|FBAV/i.test(ua);
-            const isWebView = (/iPhone|iPad|iPod/i.test(ua) && !/Safari/i.test(ua)) || ua.includes('wv');
+            // 2. Если это TikTok, Instagram или встроенный браузер — показываем ЗАГЛУШКУ
+            const isTikTok = ua.includes("tiktok") || ua.includes("musically");
+            const isSocial = ua.includes("instagram") || ua.includes("fbav") || ua.includes("fban");
+            const isWebView = (ua.includes("iphone") || ua.includes("ipad")) ? !ua.includes("safari") : ua.includes("wv");
 
-            if (isTikTok || isSocial || isWebView) {
-                // Ничего не делаем, заглушка висит по умолчанию
-                console.log("App Mode");
+            if (isTikTok || isSocial || isWebView || urlParams.has('tt')) {
+                showInstruction();
             } else {
-                // Если чистый Safari/Chrome — убираем заглушку
                 showSite();
             }
+        }
+
+        function showInstruction() {
+            document.getElementById('tiktok-view').style.display = 'flex';
+            document.getElementById('browser-view').style.display = 'none';
+            document.body.style.overflow = 'hidden';
         }
 
         function showSite() {
@@ -130,7 +148,7 @@
             document.body.style.overflow = 'auto';
         }
 
-        window.onload = checkPlatform;
+        window.onload = run;
     </script>
 </body>
 </html>
