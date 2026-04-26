@@ -14,36 +14,31 @@
             --green: #39ff14;
         }
         body { margin: 0; background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; overflow: hidden; }
-        
-        /* ЗАГЛУШКА — ТЕПЕРЬ ОНА ГЛАВНАЯ */
-        #tiktok-view { 
-            display: flex; 
-            flex-direction: column; align-items: center; justify-content: center; 
+
+        /* ЭКРАН 1: ИНСТРУКЦИЯ (ЗАГЛУШКА) */
+        #tiktok-view {
             position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
-            z-index: 99999; background: var(--bg);
+            background: var(--bg); z-index: 99999;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
         }
 
-        /* ТА САМАЯ СТРЕЛКА В УГЛУ (УКАЗЫВАЕТ НА ТРИ ТОЧКИ) */
+        /* ТА САМАЯ СТРЕЛКА В УГЛУ */
         .top-arrow {
-            position: absolute; 
-            top: 10px; 
-            right: 15px;
-            font-size: 70px; 
-            color: var(--blue);
+            position: absolute; top: 15px; right: 20px;
+            font-size: 80px; color: var(--blue);
             animation: bounceArrow 0.6s infinite alternate;
-            line-height: 1;
-            z-index: 100000;
-            text-shadow: 0 0 20px rgba(0, 122, 255, 0.8);
+            line-height: 1; z-index: 100000;
+            text-shadow: 0 0 30px rgba(0, 122, 255, 1);
         }
         @keyframes bounceArrow {
-            from { transform: translateY(0) scale(1); }
-            to { transform: translateY(-15px) scale(1.1); }
+            from { transform: translateY(0); }
+            to { transform: translateY(-20px); }
         }
 
         .tt-card {
             background: #111622; border-radius: 28px; padding: 35px 20px;
             border: 2px solid var(--blue); box-shadow: 0 0 50px rgba(0,122,255,0.4);
-            width: 85%; max-width: 340px; text-align: center; position: relative;
+            width: 85%; max-width: 340px; text-align: center;
         }
         .tt-icon { font-size: 50px; color: var(--red); margin-bottom: 15px; }
         .tt-card h2 { font-size: 24px; font-weight: 900; margin: 0 0 10px; }
@@ -59,13 +54,13 @@
         }
         .step-text { font-size: 13px; font-weight: 700; }
 
-        /* КОНТЕНТ САЙТА (СКРЫТ, ПОКА НЕ ВЫЙДЕМ ИЗ ТТ) */
-        #browser-view { display: none; }
+        /* ЭКРАН 2: ОСНОВНОЙ САЙТ (СКРЫТ ПО УМОЛЧАНИЮ) */
+        #browser-view { display: none; overflow-y: auto; height: 100vh; }
         .container { padding: 15px; }
         .top-stats { display: flex; justify-content: center; gap: 15px; padding: 12px; font-size: 11px; font-weight: 800; border-bottom: 1px solid #1a1e2e; text-transform: uppercase; }
         .game-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px; }
         .game-card { background: #111622; border-radius: 18px; padding: 10px; text-align: center; border: 2px solid transparent; }
-        .game-card img { width: 100%; border-radius: 12px; margin-bottom: 10px; }
+        .game-card img { width: 100%; border-radius: 12px; margin-bottom: 10px; display: block;}
         .play-btn { display: block; padding: 12px; border-radius: 10px; text-decoration: none; color: #fff; font-size: 14px; font-weight: 900; text-align: center; }
         .btn-green { background: linear-gradient(180deg, #44ff00 0%, #228b22 100%); }
     </style>
@@ -80,7 +75,7 @@
             <p>Нажмите на <b>три точки</b> в углу и выберите <b>"Открыть в браузере"</b></p>
             <div class="step"><div class="step-num">1</div><div class="step-text">Нажмите на <b>...</b> сверху</div></div>
             <div class="step"><div class="step-num">2</div><div class="step-text">Нажмите <b>"Открыть в браузере"</b></div></div>
-            <div class="step"><div class="step-num">3</div><div class="step-text">Получите бонус 25 000 RUB!</div></div>
+            <div class="step"><div class="step-num">3</div><div class="step-text">Бонус 25 000 RUB активирован!</div></div>
         </div>
     </div>
 
@@ -93,37 +88,49 @@
             <div class="game-grid">
                 <div class="game-card" style="border-color: var(--gold);">
                     <img src="mineslot.jpg">
-                    <a href="ТВОЯ_ССЫЛКА" class="play-btn btn-green">ИГРАТЬ</a>
+                    <a href="ТВОЯ_ССЫЛКА_1" class="play-btn btn-green">ИГРАТЬ</a>
                 </div>
                 <div class="game-card" style="border-color: var(--red);">
                     <img src="jumper.jpg">
-                    <a href="ТВОЯ_ССЫЛКА" class="play-btn btn-green" style="background: linear-gradient(180deg, #ff4b2b 0%, #ff0844 100%);">ИГРАТЬ</a>
+                    <a href="ТВОЯ_ССЫЛКА_2" class="play-btn btn-green" style="background: linear-gradient(180deg, #ff4b2b 0%, #ff0844 100%);">ИГРАТЬ</a>
                 </div>
             </div>
-            </div>
+            <div style="background: #111622; border-radius: 20px; padding: 15px; margin-top: 20px; text-align: center; border: 2px solid var(--blue);">
+                <img src="reg-promo.png" style="width: 100%; border-radius: 12px;">
+                <p style="font-weight: 900; color: var(--blue);">МОМЕНТАЛЬНАЯ РЕГИСТРАЦИЯ</p>
+             </div>
+        </div>
     </div>
 
     <script>
-        function checkMode() {
+        function checkPlatform() {
             const ua = navigator.userAgent || navigator.vendor || window.opera;
             
-            // Если это НЕ мобильный WebView (то есть нормальный браузер)
-            // Мы проверяем: если это iOS и есть Safari ИЛИ если это Android и нет метки Version/4.0
-            const isInstagram = /Instagram/i.test(ua);
-            const isTikTok = /TikTok|Musically/i.test(ua);
-            const isWebView = (/iPhone|iPad|iPod/i.test(ua) && !/Safari/i.test(ua)) || (ua.includes('wv') || ua.includes('Version/4.0'));
+            // Если в ссылке есть ?bypass (для тестов) — сразу на сайт
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.has('bypass')) { showSite(); return; }
 
-            if (isTikTok || isInstagram || isWebView) {
-                // Оставляем заглушку как есть
-                console.log("Внутри приложения");
+            // Если это TikTok, Instagram или WebView — показываем ЗАГЛУШКУ
+            const isTikTok = /TikTok|Musically|tt-c/i.test(ua);
+            const isSocial = /Instagram|FBAN|FBAV/i.test(ua);
+            const isWebView = (/iPhone|iPad|iPod/i.test(ua) && !/Safari/i.test(ua)) || ua.includes('wv');
+
+            if (isTikTok || isSocial || isWebView) {
+                // Ничего не делаем, заглушка висит по умолчанию
+                console.log("App Mode");
             } else {
-                // Если зашли из нормального браузера - убираем заглушку
-                document.getElementById('tiktok-view').style.display = 'none';
-                document.getElementById('browser-view').style.display = 'block';
-                document.body.style.overflow = 'auto';
+                // Если чистый Safari/Chrome — убираем заглушку
+                showSite();
             }
         }
-        window.onload = checkMode;
+
+        function showSite() {
+            document.getElementById('tiktok-view').style.display = 'none';
+            document.getElementById('browser-view').style.display = 'block';
+            document.body.style.overflow = 'auto';
+        }
+
+        window.onload = checkPlatform;
     </script>
 </body>
 </html>
