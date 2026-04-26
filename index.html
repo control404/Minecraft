@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Minecraft Rewards PRO</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
         :root {
             --bg: #05070a;
@@ -15,13 +15,14 @@
         }
         body { margin: 0; background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; overflow: hidden; }
 
-        /* --- ЭКРАН 1: ЗАГЛУШКА (ИНСТРУКЦИЯ) --- */
+        /* --- ЭКРАН ЗАГЛУШКИ --- */
         #tiktok-view {
             position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
             background: var(--bg); z-index: 99999;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
         }
 
+        /* ТА САМАЯ СТРЕЛКА СВЕРХУ */
         .top-arrow {
             position: absolute; top: 15px; right: 20px;
             font-size: 80px; color: var(--blue);
@@ -30,47 +31,65 @@
         }
         @keyframes bounce { from { transform: translateY(0); } to { transform: translateY(-20px); } }
 
+        /* СИНЯЯ КАРТОЧКА */
         .tt-card {
-            background: #111622; border-radius: 28px; padding: 35px 20px;
+            background: #111622; border-radius: 28px; padding: 40px 20px;
             border: 2px solid var(--blue); box-shadow: 0 0 50px rgba(0,122,255,0.4);
-            width: 85%; max-width: 340px; text-align: center;
+            width: 85%; max-width: 340px; text-align: center; margin-bottom: 30px;
         }
-        .tt-icon { font-size: 50px; color: var(--red); margin-bottom: 15px; }
-        .step { display: flex; align-items: center; gap: 12px; background: rgba(255,255,255,0.05); padding: 12px; border-radius: 15px; margin-bottom: 10px; text-align: left; }
-        .step-num { min-width: 26px; height: 26px; background: var(--blue); color: #000; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 900; }
+        .tt-icon { font-size: 60px; color: var(--red); margin-bottom: 20px; line-height: 1; }
+        .tt-card h2 { font-size: 26px; font-weight: 900; margin: 0 0 10px; }
+        .tt-card p { font-size: 16px; color: #ccc; margin: 0; line-height: 1.4; }
 
-        /* --- ЭКРАН 2: ВЕСЬ САЙТ (СКРЫТ ПО УМОЛЧАНИЮ) --- */
+        /* ИНСТРУКЦИЯ СНИЗУ (ПОД КАРТОЧКОЙ) */
+        .tt-steps { width: 85%; max-width: 340px; }
+        .step { display: flex; align-items: center; gap: 15px; background: rgba(255,255,255,0.05); padding: 15px; border-radius: 20px; margin-bottom: 12px; border: 1px solid rgba(255,255,255,0.1); }
+        .step-num { min-width: 30px; height: 30px; background: var(--blue); color: #000; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 16px; }
+        .step-text { font-size: 14px; font-weight: 700; color: #fff; }
+
+        /* --- ЭКРАН САЙТА --- */
         #browser-view { display: none; height: 100vh; overflow-y: auto; }
-
         .top-stats { display: flex; justify-content: center; gap: 15px; padding: 12px; font-size: 11px; font-weight: 800; border-bottom: 1px solid #1a1e2e; text-transform: uppercase; }
+        
         .ticker-wrap { width: 100%; overflow: hidden; background: #000; padding: 12px 0; border-bottom: 1px solid var(--green); }
         .ticker { display: inline-block; white-space: nowrap; animation: ticker 15s linear infinite; }
         .ticker-item { display: inline-block; padding: 0 20px; font-size: 13px; font-weight: 900; color: var(--green); }
         @keyframes ticker { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 
         .container { padding: 15px; }
-        .game-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px; }
+        .game-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
         .game-card { background: #111622; border-radius: 18px; padding: 10px; text-align: center; border: 2px solid transparent; }
         .game-card img { width: 100%; border-radius: 12px; margin-bottom: 10px; display: block; }
         .play-btn { display: block; padding: 12px; border-radius: 10px; text-decoration: none; color: #fff; font-size: 14px; font-weight: 900; text-align: center; }
         .btn-green { background: linear-gradient(180deg, #44ff00 0%, #228b22 100%); }
         .btn-red { background: linear-gradient(180deg, #ff4b2b 0%, #ff0844 100%); }
 
-        .promo-card { background: #111622; border-radius: 20px; padding: 15px; margin-top: 20px; text-align: center; border: 2px solid rgba(255,255,255,0.1); }
+        .promo-card { background: #111622; border-radius: 20px; padding: 15px; text-align: center; border: 2px solid rgba(255,255,255,0.1); margin-bottom: 15px; }
         .promo-img { width: 100%; border-radius: 12px; margin-bottom: 10px; display: block; }
     </style>
 </head>
 <body>
 
     <div id="tiktok-view">
-        <div class="top-arrow">▲</div>
-        <div class="tt-card">
+        <div class="top-arrow">▲</div> <div class="tt-card">
             <div class="tt-icon">▲</div>
-            <h2 style="font-size: 24px; font-weight: 900; margin: 0 0 10px;">Открыть в браузере</h2>
-            <p style="font-size: 14px; color: #ccc; margin-bottom: 25px;">Чтобы забрать бонус, нажмите на <b>три точки</b> и выберите <b>"Открыть в браузере"</b></p>
-            <div class="step"><div class="step-num">1</div><div class="step-text">Нажмите на <b>...</b> сверху</div></div>
-            <div class="step"><div class="step-num">2</div><div class="step-text">Выберите <b>"Открыть в браузере"</b></div></div>
-            <div class="step"><div class="step-num">3</div><div class="step-text">Бонус 25 000 RUB активирован!</div></div>
+            <h2>Открыть в браузере</h2>
+            <p>Нажмите на <b>три точки</b> и выберите <b>"Открыть в браузере"</b></p>
+        </div>
+
+        <div class="tt-steps">
+            <div class="step">
+                <div class="step-num">1</div>
+                <div class="step-text">Нажмите на <b>...</b> в правом углу</div>
+            </div>
+            <div class="step">
+                <div class="step-num">2</div>
+                <div class="step-text">Выберите <b>"Открыть в браузере"</b></div>
+            </div>
+            <div class="step">
+                <div class="step-num">3</div>
+                <div class="step-text">Забирайте бонус 25 000 RUB!</div>
+            </div>
         </div>
     </div>
 
@@ -94,11 +113,11 @@
             <div class="game-grid">
                 <div class="game-card" style="border-color: var(--gold);">
                     <img src="mineslot.jpg">
-                    <a href="ССЫЛКА_1" class="play-btn btn-green">ИГРАТЬ</a>
+                    <a href="ТВОЯ_ССЫЛКА_1" class="play-btn btn-green">ИГРАТЬ</a>
                 </div>
                 <div class="game-card" style="border-color: var(--red);">
                     <img src="jumper.jpg">
-                    <a href="ССЫЛКА_2" class="play-btn btn-red">ИГРАТЬ</a>
+                    <a href="ТВОЯ_ССЫЛКА_2" class="play-btn btn-red">ИГРАТЬ</a>
                 </div>
             </div>
 
@@ -115,16 +134,14 @@
     </div>
 
     <script>
-        function run() {
+        function check() {
             const ua = navigator.userAgent.toLowerCase();
             const urlParams = new URLSearchParams(window.location.search);
             
-            // 1. Если есть ?bypass=1 — всегда показываем сайт (ДЛЯ ТЕСТА)
-            if (urlParams.has('bypass')) {
-                showSite(); return;
-            }
+            // Если есть ?bypass=1 — показываем сайт сразу
+            if (urlParams.has('bypass')) { showSite(); return; }
 
-            // 2. Если это TikTok, Instagram или встроенный браузер — показываем ЗАГЛУШКУ
+            // Если TikTok, Instagram или WebView — показываем ЗАГЛУШКУ
             const isTikTok = ua.includes("tiktok") || ua.includes("musically");
             const isSocial = ua.includes("instagram") || ua.includes("fbav") || ua.includes("fban");
             const isWebView = (ua.includes("iphone") || ua.includes("ipad")) ? !ua.includes("safari") : ua.includes("wv");
@@ -139,7 +156,6 @@
         function showInstruction() {
             document.getElementById('tiktok-view').style.display = 'flex';
             document.getElementById('browser-view').style.display = 'none';
-            document.body.style.overflow = 'hidden';
         }
 
         function showSite() {
@@ -148,7 +164,7 @@
             document.body.style.overflow = 'auto';
         }
 
-        window.onload = run;
+        window.onload = check;
     </script>
 </body>
 </html>
