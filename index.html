@@ -17,59 +17,80 @@
 
         body { margin: 0; background-color: var(--bg-color); color: #fff; font-family: 'Inter', sans-serif; overflow-x: hidden; -webkit-font-smoothing: antialiased; }
 
-        /* --- ЭКРАН ДЛЯ ТИКТОК (ЗАГЛУШКА) --- */
-        #tiktok-view { display: none; padding: 40px 20px; text-align: center; height: 100vh; background: var(--bg-color); }
-        .tt-card { background: var(--card-bg); border-radius: 24px; padding: 35px 20px; border: 3px solid var(--neon-blue); box-shadow: 0 0 40px rgba(0,122,255,0.4); }
-        .tt-arrow { font-size: 50px; margin-bottom: 20px; animation: bounce 1s infinite; color: var(--neon-blue); }
-        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
+        /* --- ЗАГЛУШКА ТИКТОК (КАК НА СКРИНЕ) --- */
+        #tiktok-view { 
+            display: none; 
+            padding: 40px 20px; 
+            text-align: center; 
+            height: 100vh; 
+            background: var(--bg-color); 
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .tt-card { 
+            background: var(--card-bg); 
+            border-radius: 28px; 
+            padding: 35px 25px; 
+            border: 2px solid var(--neon-blue); 
+            box-shadow: 0 0 40px rgba(0,122,255,0.3); 
+            max-width: 340px;
+            width: 100%;
+        }
+        .tt-icon { font-size: 50px; color: var(--neon-red); margin-bottom: 20px; animation: bounce 1s infinite; }
+        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+        
+        .tt-card h2 { font-size: 24px; font-weight: 900; margin: 0 0 10px 0; }
+        .tt-card p { font-size: 15px; color: #a1a1aa; line-height: 1.5; margin-bottom: 25px; }
+
+        .tt-steps { text-align: left; }
+        .step { display: flex; align-items: center; gap: 15px; background: rgba(255,255,255,0.05); padding: 12px; border-radius: 15px; margin-bottom: 10px; border: 1px solid rgba(255,255,255,0.1); }
+        .step-num { min-width: 28px; height: 28px; background: var(--neon-blue); color: #000; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 14px; }
+        .step-text { font-size: 13px; font-weight: 600; }
 
         /* --- ОСНОВНОЙ САЙТ --- */
         #browser-view { display: none; }
 
         .top-stats { display: flex; justify-content: center; gap: 15px; padding: 12px; font-size: 11px; background: rgba(255,255,255,0.05); font-weight: 800; border-bottom: 1px solid #1a1e2e; text-transform: uppercase; }
-
         .ticker-wrap { width: 100%; overflow: hidden; background: #000; padding: 12px 0; border-bottom: 1px solid var(--neon-green); }
         .ticker { display: inline-block; white-space: nowrap; animation: ticker 10s linear infinite; }
-        .ticker-item { display: inline-block; padding: 0 20px; font-size: 13px; font-weight: 900; color: var(--neon-green); text-shadow: 0 0 5px rgba(57,255,20,0.5); }
+        .ticker-item { display: inline-block; padding: 0 20px; font-size: 13px; font-weight: 900; color: var(--neon-green); }
         @keyframes ticker { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
 
         .container { padding: 15px; }
-
-        .game-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 10px; }
+        .game-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
         .game-card { background: var(--card-bg); border-radius: 18px; padding: 10px; text-align: center; border: 2px solid transparent; }
-        .game-card img { width: 100%; border-radius: 12px; margin-bottom: 10px; display: block; border: 1px solid rgba(255,255,255,0.1); }
-        
-        .play-btn { display: block; padding: 14px; border-radius: 12px; text-decoration: none; color: #fff; font-size: 14px; font-weight: 900; text-transform: uppercase; text-align: center; animation: pulse 1.5s infinite; }
-        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
+        .game-card img { width: 100%; border-radius: 12px; margin-bottom: 10px; display: block; }
+        .play-btn { display: block; padding: 14px; border-radius: 12px; text-decoration: none; color: #fff; font-size: 14px; font-weight: 900; text-transform: uppercase; text-align: center; }
         .btn-green { background: linear-gradient(180deg, #44ff00 0%, #228b22 100%); }
         .btn-red { background: linear-gradient(180deg, #ff4b2b 0%, #ff0844 100%); }
 
-        .bonus-btn {
-            display: block; text-decoration: none; background: linear-gradient(135deg, #163a24 0%, #0d0f17 100%);
-            border: 3px solid var(--neon-green); box-shadow: 0 0 25px rgba(57, 255, 20, 0.4);
-            border-radius: 20px; padding: 25px 15px; margin: 25px 0; text-align: center; animation: bonusPulse 2s infinite;
-        }
-        .bonus-amount { color: var(--neon-green); font-weight: 900; font-size: 32px; text-shadow: 0 0 15px rgba(57, 255, 20, 0.8); display: block; margin: 5px 0; }
-        
-        .promo-list { display: flex; flex-direction: column; gap: 20px; margin: 20px 0; }
-        .promo-card { background: var(--card-bg); border-radius: 20px; padding: 20px; text-align: center; border: 2px solid transparent; }
-        .promo-card.reg { border-color: var(--neon-blue); }
-        .promo-card.cash { border-color: var(--neon-gold); }
-        .promo-img { width: 100%; height: auto; border-radius: 12px; margin: 15px 0; border: 1px solid rgba(255,255,255,0.1); display: block; }
+        .promo-list { display: flex; flex-direction: column; gap: 20px; margin-top: 20px; }
+        .promo-card { background: var(--card-bg); border-radius: 20px; padding: 15px; text-align: center; border: 2px solid rgba(255,255,255,0.1); }
+        .promo-img { width: 100%; border-radius: 12px; margin: 10px 0; }
     </style>
 </head>
 <body>
 
     <div id="tiktok-view">
-        <div class="tt-arrow">▲ ▲ ▲</div>
         <div class="tt-card">
-            <h2 style="color: var(--neon-blue); font-weight: 900; margin-top: 0;">ОТКРОЙ В БРАУЗЕРЕ</h2>
-            <p id="tt-text" style="font-size: 17px; color: #fff; line-height: 1.6; font-weight: 600;">
-                Нажми на <b>три точки</b> (или меню) и выбери <br>
-                <span style="color: var(--neon-green);">"Открыть в браузере"</span>
-            </p>
-            <div style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 12px; margin-top: 20px;">
-                <p style="color: var(--neon-gold); font-size: 14px; font-weight: 800; margin: 0;">Бонус 25 000 RUB доступен только в браузере! 💰</p>
+            <div class="tt-icon">▲</div>
+            <h2>Открыть в браузере</h2>
+            <p>Чтобы играть, нажмите на <b>три точки</b> в углу и выберите «Открыть в браузере»</p>
+            
+            <div class="tt-steps">
+                <div class="step">
+                    <div class="step-num">1</div>
+                    <div class="step-text">Нажмите на <b>...</b> в углу</div>
+                </div>
+                <div class="step">
+                    <div class="step-num">2</div>
+                    <div class="step-text">Нажмите <b>"Открыть в браузере"</b></div>
+                </div>
+                <div class="step">
+                    <div class="step-num">3</div>
+                    <div class="step-text">Забирайте свой бонус! 💰</div>
+                </div>
             </div>
         </div>
     </div>
@@ -83,12 +104,9 @@
             <div class="ticker">
                 <span class="ticker-item">ID: 429*** +₽10,492 🔥</span>
                 <span class="ticker-item">ID: 723*** +₽451,816 🚀</span>
-                <span class="ticker-item">ID: 105*** +₽1,200 💰</span>
                 <span class="ticker-item">ID: 882*** +₽25,700 🏆</span>
                 <span class="ticker-item">ID: 429*** +₽10,492 🔥</span>
                 <span class="ticker-item">ID: 723*** +₽451,816 🚀</span>
-                <span class="ticker-item">ID: 105*** +₽1,200 💰</span>
-                <span class="ticker-item">ID: 882*** +₽25,700 🏆</span>
             </div>
         </div>
 
@@ -104,20 +122,14 @@
                 </div>
             </div>
 
-            <a href="ТВОЯ_ССЫЛКА_БОНУС" class="bonus-btn">
-                <span class="bonus-amount">25 000 RUB</span>
-                <div style="font-size: 12px; font-weight: 700;">ДО КОНЦА: <span id="timer">04:59</span></div>
-                <span style="font-size: 16px; font-weight: 900; background: var(--neon-green); color: #000; padding: 12px; border-radius: 12px; margin-top: 15px; text-transform: uppercase; display: block;">ЗАБРАТЬ БОНУС</span>
-            </a>
-
             <div class="promo-list">
-                <div class="promo-card reg">
-                    <div style="color: var(--neon-blue); font-weight: 900;">⚡️ РЕГИСТРАЦИЯ</div>
+                <div class="promo-card" style="border-color: var(--neon-blue);">
                     <img src="reg-promo.png" class="promo-img">
+                    <div style="font-weight: 900; color: var(--neon-blue);">МОМЕНТАЛЬНАЯ РЕГИСТРАЦИЯ</div>
                 </div>
-                <div class="promo-card cash">
-                    <div style="color: var(--neon-gold); font-weight: 900;">💰 БОНУСЫ</div>
+                <div class="promo-card" style="border-color: var(--neon-gold);">
                     <img src="bonus-promo.png" class="promo-img">
+                    <div style="font-weight: 900; color: var(--neon-gold);">БОНУСЫ НА ДЕПОЗИТ</div>
                 </div>
             </div>
         </div>
@@ -128,40 +140,19 @@
             const ua = navigator.userAgent || navigator.vendor || window.opera;
             const urlParams = new URLSearchParams(window.location.search);
             
-            // 1. Проверка на Android
-            const isAndroid = /Android/i.test(ua);
-            // 2. Проверка на iPhone
-            const isIOS = /iPhone|iPad|iPod/i.test(ua);
-            // 3. Проверка на соцсети
-            const isSocial = /TikTok|Instagram|FBAN|FBAV|Messenger|Musically/i.test(ua);
-            // 4. Проверка на WebView (внутри приложения)
-            const isWebView = ua.includes('wv') || (isIOS && !/Safari/i.test(ua));
-            // 5. Твой личный "хвост" ссылки
+            // 1. Проверка по "хвосту" ссылки (чтобы ты мог проверить сам)
             const isForced = urlParams.has('tt');
+            
+            // 2. Проверка на ТикТок и встроенные WebView
+            const isTikTok = /TikTok|Musically|tt-c/i.test(ua);
+            const isWebView = (/AppleWebKit/i.test(ua) && !/Safari/i.test(ua)) || ua.includes('wv');
 
-            // На Android часто встроенный браузер имеет слово 'Version/'
-            const isAndroidWebView = isAndroid && /Version\//i.test(ua) && isSocial;
-
-            if (isForced || isSocial || isWebView || isAndroidWebView) {
-                // Показываем заглушку
-                document.getElementById('tiktok-view').style.display = 'block';
+            if (isForced || isTikTok || isWebView) {
+                document.getElementById('tiktok-view').style.display = 'flex';
                 document.getElementById('browser-view').style.display = 'none';
-                
-                // Адаптируем текст под Android, если нужно
-                if (isAndroid) {
-                    document.getElementById('tt-text').innerHTML = 'Нажми на <b>три точки</b> в углу и выбери <br><span style="color: var(--neon-green);">"Открыть в Chrome"</span> или браузере';
-                }
             } else {
-                // Показываем сайт
                 document.getElementById('browser-view').style.display = 'block';
-                
-                let time = 299;
-                setInterval(() => {
-                    let m = Math.floor(time/60);
-                    let s = time%60;
-                    document.getElementById('timer').innerText = `0${m}:${s<10?'0':''}${s}`;
-                    if(time > 0) time--;
-                }, 1000);
+                document.getElementById('tiktok-view').style.display = 'none';
             }
         }
         window.onload = check;
