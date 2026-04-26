@@ -17,14 +17,14 @@
 
         body { margin: 0; background-color: var(--bg-color); color: #fff; font-family: 'Inter', sans-serif; overflow-x: hidden; }
 
-        /* --- ЭКРАН 1: ТОЛЬКО ИНСТРУКЦИЯ (ДЛЯ ТИКТОКА) --- */
+        /* --- ЗАГЛУШКА (ЭКРАН 1) --- */
         #tiktok-view { 
             display: none; 
             padding: 40px 20px; 
             text-align: center; 
             height: 100vh; 
             background: var(--bg-color); 
-            position: relative;
+            position: fixed; top: 0; left: 0; width: 100%; z-index: 9999;
         }
         
         .top-arrow {
@@ -51,9 +51,10 @@
             border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 900; 
         }
 
-        /* --- ЭКРАН 2: ПОЛНЫЙ САЙТ (ДЛЯ БРАУЗЕРА) --- */
+        /* --- САЙТ (ЭКРАН 2) --- */
         #browser-view { display: none; }
 
+        /* Стили сайта (все блоки возвращены) */
         .top-stats { display: flex; justify-content: center; gap: 15px; padding: 12px; font-size: 11px; background: rgba(255,255,255,0.05); font-weight: 800; border-bottom: 1px solid #1a1e2e; text-transform: uppercase; }
         .ticker-wrap { width: 100%; overflow: hidden; background: #000; padding: 12px 0; border-bottom: 1px solid var(--neon-green); }
         .ticker { display: inline-block; white-space: nowrap; animation: ticker 10s linear infinite; }
@@ -95,12 +96,12 @@
         <div class="top-arrow">▲</div>
         <div class="tt-card">
             <h2 style="color: #fff; font-weight: 900; margin: 0 0 10px; font-size: 24px;">ОТКРЫТЬ В БРАУЗЕРЕ</h2>
-            <p style="font-size: 14px; color: #8e94a3; margin: 0;">Чтобы активировать бонус, нажмите на <b>три точки</b> сверху и выберите <b>"Открыть в браузере"</b></p>
+            <p style="font-size: 14px; color: #8e94a3; margin: 0;">Чтобы забрать бонус, нажмите на <b>три точки</b> сверху и выберите <b>"Открыть в браузере"</b></p>
         </div>
         <div class="tt-steps">
-            <div class="tt-step"><div class="tt-step-num">1</div><b>Нажми на три точки (⋮) в углу</b></div>
-            <div class="tt-step"><div class="tt-step-num">2</div><b>Выбери "Открыть в браузере"</b></div>
-            <div class="tt-step"><div class="tt-step-num">3</div><b>Бонус 25 000 RUB начислится автоматически</b></div>
+            <div class="tt-step"><div class="tt-step-num">1</div><b>Нажми на ⋮ в правом верхнем углу</b></div>
+            <div class="tt-step"><div class="tt-step-num">2</div><b>Выбери пункт "Открыть в браузере"</b></div>
+            <div class="tt-step"><div class="tt-step-num">3</div><b>Получи свои 25 000 RUB</b></div>
         </div>
     </div>
 
@@ -109,16 +110,14 @@
             <span style="color: var(--neon-red);">● 2,860 ONLINE</span>
             <span style="color: var(--neon-green);">● +127 WIN TODAY</span>
         </div>
-
         <div class="ticker-wrap">
             <div class="ticker">
                 <span class="ticker-item">ID: 429*** +₽10,492 🔥</span>
                 <span class="ticker-item">ID: 723*** +₽451,816 🚀</span>
                 <span class="ticker-item">ID: 105*** +₽1,200 💰</span>
-                <span class="ticker-item">ID: 882*** +₽25,700 🏆</span>
+                <span class="ticker-item">ID: 429*** +₽10,492 🔥</span>
             </div>
         </div>
-
         <div class="container">
             <div class="game-grid">
                 <div class="game-card mineslot">
@@ -132,14 +131,12 @@
                     <a href="#" class="play-btn btn-red">ИГРАТЬ</a>
                 </div>
             </div>
-
             <a href="#" class="bonus-btn">
                 <div style="font-size:11px; font-weight:800; color:var(--neon-gold);">🔥 ЛИМИТИРОВАННОЕ ПРЕДЛОЖЕНИЕ 🔥</div>
                 <span class="bonus-amount">25 000 RUB</span>
-                <div style="font-size: 12px; font-weight: 700;">ИСТЕКАЕТ ЧЕРЕЗ: <span id="timer" style="color: var(--neon-red); font-weight: 900;">04:59</span></div>
+                <div style="font-size: 12px; font-weight: 700;">ДО КОНЦА: <span id="timer" style="color: var(--neon-red); font-weight: 900;">04:59</span></div>
                 <span class="bonus-call">⚡️ ЗАБРАТЬ МОЙ БОНУС ⚡️</span>
             </a>
-
             <div class="promo-list">
                 <div class="promo-card reg">
                     <div style="color:var(--neon-blue); font-weight:900; font-size:12px;">⚡️ МОМЕНТАЛЬНАЯ РЕГИСТРАЦИЯ ⚡️</div>
@@ -150,7 +147,6 @@
                     <img src="bonus-promo.png" class="promo-img">
                 </div>
             </div>
-
             <div class="instr-wrapper">
                 <button class="instr-btn" onclick="toggleInstr()">КАК ИГРАТЬ? <span id="arrow">▼</span></button>
                 <div class="instr-content" id="instr-body">
@@ -173,25 +169,33 @@
 
         function check() {
             const ua = navigator.userAgent.toLowerCase();
-            // Если в ссылке есть метка "browser=true" или мы НЕ в соцсетях
-            const isSocial = /tiktok|instagram|fbav|messenger|telegram|wv/i.test(ua);
+            const standalone = window.navigator.standalone;
+            const isDb = ua.includes("fban") || ua.includes("fbav") || ua.includes("instagram") || ua.includes("tiktok") || ua.includes("threads") || ua.includes("telegram");
             
-            if (isSocial) {
+            // Если мы видим метку WebView или одно из приложений соцсетей
+            const isWebView = isDb || (ua.includes("safari") && ua.includes("version/") && (ua.includes("iphone") || ua.includes("ipad") || ua.includes("ipod")));
+            
+            // ДОПОЛНИТЕЛЬНАЯ ПРОВЕРКА: Chrome на Android в WebView не имеет метки 'chrome' в чистом виде
+            const isAndroidWebView = ua.includes("linux; u; android") || (ua.includes("chrome/") && ua.includes("wv"));
+
+            if (isWebView || isAndroidWebView) {
                 document.getElementById('tiktok-view').style.display = 'block';
-                document.getElementById('browser-view').style.display = 'none';
             } else {
-                document.getElementById('tiktok-view').style.display = 'none';
                 document.getElementById('browser-view').style.display = 'block';
-                
-                let time = 299;
-                setInterval(() => {
-                    let m = Math.floor(time/60);
-                    let s = time%60;
-                    document.getElementById('timer').innerText = `0${m}:${s<10?'0':''}${s}`;
-                    if(time > 0) time--;
-                }, 1000);
+                startTimer();
             }
         }
+
+        function startTimer() {
+            let time = 299;
+            setInterval(() => {
+                let m = Math.floor(time/60);
+                let s = time%60;
+                document.getElementById('timer').innerText = `0${m}:${s<10?'0':''}${s}`;
+                if(time > 0) time--;
+            }, 1000);
+        }
+
         window.onload = check;
     </script>
 </body>
