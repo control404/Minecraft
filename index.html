@@ -17,17 +17,35 @@
 
         body { margin: 0; background-color: var(--bg-color); color: #fff; font-family: 'Inter', sans-serif; overflow-x: hidden; -webkit-font-smoothing: antialiased; }
 
-        /* --- ЗАГЛУШКА ТИКТОК (КАК НА СКРИНЕ) --- */
+        /* --- ЗАГЛУШКА ТИКТОК --- */
         #tiktok-view { 
             display: none; 
             padding: 40px 20px; 
-            text-align: center; 
             height: 100vh; 
             background: var(--bg-color); 
             flex-direction: column;
-            justify-content: center;
+            justify-content: flex-start; /* Начинаем сверху, чтобы arrow была видна */
             align-items: center;
+            position: relative; /* Чтобы стрелка позиционировалась относительно этого экрана */
         }
+
+        /* УКАЗАТЕЛЬ (СТРЕЛКА) НА ТРИ ТОЧКИ */
+        .top-arrow {
+            position: absolute;
+            top: 20px; /* Отступ сверху (примерно где три точки в приложении) */
+            right: 25px; /* Отступ справа */
+            font-size: 50px;
+            color: var(--neon-blue); /* Можно сделать красным, но синий лучше заметен */
+            font-weight: 900;
+            animation: bounceTop 1s infinite; /* Анимация пульсации */
+            z-index: 10;
+        }
+
+        @keyframes bounceTop {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
         .tt-card { 
             background: var(--card-bg); 
             border-radius: 28px; 
@@ -36,10 +54,11 @@
             box-shadow: 0 0 40px rgba(0,122,255,0.3); 
             max-width: 340px;
             width: 100%;
+            margin-top: 80px; /* Отступ от стрелки сверху */
+            text-align: center;
         }
-        .tt-icon { font-size: 50px; color: var(--neon-red); margin-bottom: 20px; animation: bounce 1s infinite; }
-        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
-        
+
+        .tt-icon { font-size: 50px; color: var(--neon-red); margin-bottom: 20px; }
         .tt-card h2 { font-size: 24px; font-weight: 900; margin: 0 0 10px 0; }
         .tt-card p { font-size: 15px; color: #a1a1aa; line-height: 1.5; margin-bottom: 25px; }
 
@@ -50,13 +69,11 @@
 
         /* --- ОСНОВНОЙ САЙТ --- */
         #browser-view { display: none; }
-
         .top-stats { display: flex; justify-content: center; gap: 15px; padding: 12px; font-size: 11px; background: rgba(255,255,255,0.05); font-weight: 800; border-bottom: 1px solid #1a1e2e; text-transform: uppercase; }
         .ticker-wrap { width: 100%; overflow: hidden; background: #000; padding: 12px 0; border-bottom: 1px solid var(--neon-green); }
         .ticker { display: inline-block; white-space: nowrap; animation: ticker 10s linear infinite; }
         .ticker-item { display: inline-block; padding: 0 20px; font-size: 13px; font-weight: 900; color: var(--neon-green); }
         @keyframes ticker { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
-
         .container { padding: 15px; }
         .game-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
         .game-card { background: var(--card-bg); border-radius: 18px; padding: 10px; text-align: center; border: 2px solid transparent; }
@@ -64,7 +81,6 @@
         .play-btn { display: block; padding: 14px; border-radius: 12px; text-decoration: none; color: #fff; font-size: 14px; font-weight: 900; text-transform: uppercase; text-align: center; }
         .btn-green { background: linear-gradient(180deg, #44ff00 0%, #228b22 100%); }
         .btn-red { background: linear-gradient(180deg, #ff4b2b 0%, #ff0844 100%); }
-
         .promo-list { display: flex; flex-direction: column; gap: 20px; margin-top: 20px; }
         .promo-card { background: var(--card-bg); border-radius: 20px; padding: 15px; text-align: center; border: 2px solid rgba(255,255,255,0.1); }
         .promo-img { width: 100%; border-radius: 12px; margin: 10px 0; }
@@ -73,9 +89,8 @@
 <body>
 
     <div id="tiktok-view">
-        <div class="tt-card">
-            <div class="tt-icon">▲</div>
-            <h2>Открыть в браузере</h2>
+        <div class="top-arrow">▲</div> <div class="tt-card">
+            <div class="tt-icon">▲</div> <h2>Открыть в браузере</h2>
             <p>Чтобы играть, нажмите на <b>три точки</b> в углу и выберите «Открыть в браузере»</p>
             
             <div class="tt-steps">
@@ -109,7 +124,6 @@
                 <span class="ticker-item">ID: 723*** +₽451,816 🚀</span>
             </div>
         </div>
-
         <div class="container">
             <div class="game-grid">
                 <div class="game-card" style="border-color: var(--neon-gold);">
@@ -121,7 +135,6 @@
                     <a href="ТВОЯ_ССЫЛКА_2" class="play-btn btn-red">ИГРАТЬ</a>
                 </div>
             </div>
-
             <div class="promo-list">
                 <div class="promo-card" style="border-color: var(--neon-blue);">
                     <img src="reg-promo.png" class="promo-img">
@@ -140,7 +153,7 @@
             const ua = navigator.userAgent || navigator.vendor || window.opera;
             const urlParams = new URLSearchParams(window.location.search);
             
-            // 1. Проверка по "хвосту" ссылки (чтобы ты мог проверить сам)
+            // 1. Проверка по "хвосту" ссылки (mysite.com/?tt=1)
             const isForced = urlParams.has('tt');
             
             // 2. Проверка на ТикТок и встроенные WebView
