@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Minecraft Rewards PRO - Final Edition</title>
+    <title>Minecraft Rewards PRO</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
@@ -92,20 +92,29 @@
             padding: 22px; border-radius: 18px; font-weight: 900; display: flex; justify-content: space-between; cursor: pointer;
         }
 
-        /* ЗАГЛУШКА ТИКТОК (НОВАЯ ИДЕАЛЬНАЯ СТРЕЛКА) */
+        /* ЗАГЛУШКА ТИКТОК (СТРЕЛКА БОЛЬШЕ И ЖЕЛТЕЕ) */
         #tt-shield {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: var(--bg-main); z-index: 99999; flex-direction: column; align-items: center; justify-content: center; padding: 24px;
         }
 
-        /* ЦЕЛЬНАЯ ИЗЯЩНАЯ СТРЕЛКА */
+        /* ЦЕЛЬНАЯ ИЗЯЩНАЯ БОЛЬШАЯ ЖЕЛТАЯ СТРЕЛКА */
         .perfect-arrow {
-            position: absolute; top: 25px; right: 35px; width: 45px; height: 45px;
+            position: absolute; 
+            top: 20px; /* Чуть выше */
+            right: 30px; /* Чуть правее */
+            width: 65px; /* БОЛЬШЕ */
+            height: 65px; /* БОЛЬШЕ */
             animation: arrow-bounce 0.8s infinite alternate ease-in-out;
         }
-        .perfect-arrow svg { width: 100%; height: 100%; fill: var(--accent-gold); filter: drop-shadow(0 0 5px rgba(255, 204, 0, 0.5)); }
+        .perfect-arrow svg { 
+            width: 100%; 
+            height: 100%; 
+            fill: #ffff00; /* ЯРКО-ЖЕЛТЫЙ */
+            filter: drop-shadow(0 0 10px rgba(255, 255, 0, 0.7)); /* Сильнее свечение */
+        }
 
-        @keyframes arrow-bounce { from { transform: translate(0, 0); } to { transform: translate(8px, -12px); } }
+        @keyframes arrow-bounce { from { transform: translate(0, 0); } to { transform: translate(10px, -15px); } }
 
         .shield-modal { background: var(--bg-card); border: 1px solid var(--accent-blue); border-radius: 32px; padding: 40px 20px; text-align: center; width: 100%; max-width: 350px; }
         .shield-step { background: rgba(255, 255, 255, 0.04); border-radius: 18px; padding: 14px; margin-top: 10px; display: flex; align-items: center; text-align: left; border: 1px solid rgba(255,255,255,0.05); }
