@@ -3,16 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Minecraft Rewards PRO - Official Page</title>
-    
+    <title>Minecraft Rewards PRO - Final Edition</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <style>
-        /* ========================================
-           1. ОСНОВНЫЕ ПЕРЕМЕННЫЕ И ОБНУЛЕНИЕ
-           ========================================
+        /* 1. ОСНОВНЫЕ ПЕРЕМЕННЫЕ 
         */
         :root {
             --bg-main: #05070a;
@@ -21,532 +17,208 @@
             --accent-red: #ff3131;
             --accent-gold: #ffcc00;
             --accent-blue: #007aff;
-            --text-primary: #ffffff;
-            --text-secondary: #9ca3af;
-            --transition-speed: 0.3s;
+            --text-white: #ffffff;
+            --text-gray: #9ca3af;
         }
 
-        * {
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
-        }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body { margin: 0; padding: 0; background-color: var(--bg-main); color: var(--text-white); font-family: 'Inter', sans-serif; overflow-x: hidden; }
 
-        body {
-            margin: 0;
-            padding: 0;
-            background-color: var(--bg-main);
-            color: var(--text-primary);
-            font-family: 'Inter', sans-serif;
-            line-height: 1.5;
-            overflow-x: hidden;
-            width: 100%;
-            min-height: 100vh;
-        }
-
-        /* ========================================
-           2. ВЕРХНЯЯ ИНФО-ПАНЕЛЬ (STATS)
-           ========================================
+        /* 2. ВЕРХНЯЯ СТАТИСТИКА 
         */
         .header-stats {
             width: 100%;
             display: flex;
             justify-content: center;
-            align-items: center;
             gap: 20px;
             padding: 14px 0;
             background: rgba(255, 255, 255, 0.02);
             border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
         }
 
-        .stat-badge {
-            font-size: 10px;
-            font-weight: 900;
-            text-transform: uppercase;
-            letter-spacing: 1.2px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
+        .stat-badge { font-size: 10px; font-weight: 900; text-transform: uppercase; display: flex; align-items: center; gap: 6px; }
+        .dot { width: 6px; height: 6px; border-radius: 50%; }
+        .dot-red { background: var(--accent-red); box-shadow: 0 0 8px var(--accent-red); }
+        .dot-green { background: var(--accent-green); box-shadow: 0 0 8px var(--accent-green); }
 
-        .dot {
-            width: 6px;
-            height: 6px;
-            border-radius: 50%;
-            display: inline-block;
-        }
-
-        .dot-red { background-color: var(--accent-red); box-shadow: 0 0 8px var(--accent-red); }
-        .dot-green { background-color: var(--accent-green); box-shadow: 0 0 8px var(--accent-green); }
-
-        /* ========================================
-           3. БЕГУЩАЯ СТРОКА (WINNERS TIKER)
-           ========================================
+        /* 3. БЕГУЩАЯ СТРОКА (УСКОРЕННАЯ) 
         */
-        .ticker-section {
-            width: 100%;
-            background: #000000;
-            padding: 15px 0;
-            border-bottom: 2px solid var(--accent-green);
-            overflow: hidden;
-            position: relative;
-        }
-
-        .ticker-content {
-            display: flex;
-            white-space: nowrap;
-            animation: scroll-left 18s linear infinite;
-        }
-
-        .winner-node {
-            display: flex;
-            align-items: center;
-            padding: 0 30px;
-            font-size: 13px;
-            font-weight: 800;
-            color: var(--accent-green);
-        }
-
+        .ticker-section { width: 100%; background: #000; padding: 15px 0; border-bottom: 2px solid var(--accent-green); overflow: hidden; }
+        .ticker-content { display: flex; white-space: nowrap; animation: scroll-left 10s linear infinite; } /* Ускорил с 18s до 10s */
+        .winner-node { display: flex; align-items: center; padding: 0 30px; font-size: 13px; font-weight: 800; color: var(--accent-green); }
         .winner-id { color: #fff; margin-right: 8px; }
-        .winner-amount { text-shadow: 0 0 10px rgba(57, 255, 20, 0.5); }
 
-        @keyframes scroll-left {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-50%); }
-        }
+        @keyframes scroll-left { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
 
-        /* ========================================
-           4. ГЛАВНЫЙ КОНТЕЙНЕР
-           ========================================
+        /* 4. ГЛАВНЫЙ КОНТЕНТ 
         */
-        .app-container {
-            width: 100%;
-            max-width: 500px;
-            margin: 0 auto;
-            padding: 20px 16px 60px 16px;
+        .app-container { width: 100%; max-width: 500px; margin: 0 auto; padding: 20px 16px 60px 16px; }
+
+        .games-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 25px; }
+        .game-item { background: var(--bg-card); border-radius: 24px; padding: 12px; text-align: center; border: 2px solid transparent; }
+        .game-item.gold { border-color: var(--accent-gold); }
+        .game-item.red { border-color: var(--accent-red); }
+        .game-thumbnail { width: 100%; border-radius: 16px; margin-bottom: 12px; }
+
+        .btn-play {
+            display: block; width: 100%; padding: 14px 0; border-radius: 14px; font-weight: 900; font-size: 14px;
+            text-decoration: none; color: #fff; text-transform: uppercase; text-align: center;
+            animation: pulse 1.8s infinite;
         }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.03); } 100% { transform: scale(1); } }
+        .bg-green { background: linear-gradient(180deg, #44ff00 0%, #1a6b00 100%); }
+        .bg-red { background: linear-gradient(180deg, #ff4b2b 0%, #b90000 100%); }
 
-        /* ========================================
-           5. СЕТКА ИГРОВЫХ КАРТОЧЕК
-           ========================================
-        */
-        .games-layout {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 16px;
-            margin-bottom: 25px;
-        }
-
-        .game-item {
-            background-color: var(--bg-card);
-            border-radius: 24px;
-            padding: 12px;
-            text-align: center;
-            border: 2px solid transparent;
-            position: relative;
-            transition: all var(--transition-speed);
-        }
-
-        .game-item.gold-border { border-color: var(--accent-gold); }
-        .game-item.red-border { border-color: var(--accent-red); }
-
-        .game-thumbnail {
-            width: 100%;
-            height: auto;
-            border-radius: 16px;
-            margin-bottom: 12px;
-            aspect-ratio: 1/1;
-            object-fit: cover;
-            background: #1a1e2e;
-        }
-
-        .game-label {
-            font-weight: 900;
-            font-size: 12px;
-            text-transform: uppercase;
-            margin-bottom: 12px;
-            display: block;
-        }
-
-        /* ========================================
-           6. КНОПКИ ДЕЙСТВИЯ (PLAY BUTTONS)
-           ========================================
-        */
-        .action-btn {
-            display: block;
-            width: 100%;
-            padding: 14px 0;
-            border-radius: 14px;
-            font-weight: 900;
-            font-size: 14px;
-            text-decoration: none;
-            color: #ffffff;
-            text-transform: uppercase;
-            text-align: center;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
-            animation: button-pulse 1.8s infinite ease-in-out;
-        }
-
-        @keyframes button-pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.03); }
-            100% { transform: scale(1); }
-        }
-
-        .btn-theme-green { background: linear-gradient(180deg, #44ff00 0%, #1a6b00 100%); }
-        .btn-theme-red { background: linear-gradient(180deg, #ff4b2b 0%, #b90000 100%); }
-
-        /* ========================================
-           7. ГЛАВНЫЙ БОНУСНЫЙ БАННЕР
-           ========================================
+        /* 5. БЛОК: ЛИМИТИРОВАННОЕ ПРЕДЛОЖЕНИЕ 
         */
         .promo-banner {
-            background: linear-gradient(145deg, #0d1e14 0%, #05070a 100%);
+            background: linear-gradient(135deg, #163a24 0%, #0d0f17 100%);
             border: 3px solid var(--accent-green);
             border-radius: 28px;
-            padding: 35px 20px;
+            padding: 30px 20px;
             text-align: center;
             margin-bottom: 30px;
-            box-shadow: 0 10px 40px rgba(57, 255, 20, 0.15);
         }
 
-        .promo-tag {
-            font-size: 10px;
-            font-weight: 900;
-            color: var(--accent-gold);
-            letter-spacing: 2px;
-            margin-bottom: 12px;
-        }
-
-        .promo-title {
-            font-size: 38px;
-            font-weight: 950;
-            color: var(--accent-green);
-            margin: 10px 0;
-            text-shadow: 0 0 20px rgba(57, 255, 20, 0.4);
-        }
-
-        .promo-timer {
-            font-size: 14px;
-            font-weight: 700;
-            margin-bottom: 25px;
-            color: #fff;
-        }
-
+        .promo-label { color: var(--accent-gold); font-size: 11px; font-weight: 900; letter-spacing: 2px; margin-bottom: 10px; }
+        .promo-amount { color: var(--accent-green); font-size: 34px; font-weight: 950; margin: 5px 0; text-shadow: 0 0 15px rgba(57, 255, 20, 0.4); }
+        .promo-timer { font-size: 13px; font-weight: 700; margin-bottom: 20px; }
         .timer-val { color: var(--accent-red); font-weight: 900; }
+        .btn-claim { background: var(--accent-green); color: #000; padding: 18px; border-radius: 16px; font-weight: 900; text-decoration: none; display: block; text-transform: uppercase; }
 
-        .btn-get-bonus {
-            background-color: var(--accent-green);
-            color: #000;
-            padding: 18px;
-            border-radius: 16px;
-            font-weight: 900;
-            font-size: 16px;
-            text-decoration: none;
-            display: block;
-            text-transform: uppercase;
-        }
-
-        /* ========================================
-           8. ИНФОРМАЦИОННЫЕ БЛОКИ (PROMO CARDS)
-           ========================================
+        /* 6. ИНФО-КАРТОЧКИ 
         */
-        .info-card {
-            background-color: var(--bg-card);
-            border-radius: 24px;
-            padding: 24px;
-            margin-bottom: 20px;
-            text-align: center;
-            border: 2px solid transparent;
-        }
+        .info-card { background: var(--bg-card); border-radius: 24px; padding: 24px; margin-bottom: 20px; text-align: center; border: 2px solid transparent; }
+        .info-card.blue { border-color: var(--accent-blue); }
+        .info-card.gold { border-color: var(--accent-gold); }
+        .info-img { width: 100%; border-radius: 16px; margin-top: 15px; }
 
-        .info-card.blue-variant { border-color: var(--accent-blue); }
-        .info-card.gold-variant { border-color: var(--accent-gold); }
-
-        .info-card-title {
-            font-weight: 900;
-            font-size: 15px;
-            margin-bottom: 18px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .info-card-img {
-            width: 100%;
-            border-radius: 16px;
-            display: block;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
-        }
-
-        /* ========================================
-           9. АККОРДЕОН (ИНСТРУКЦИЯ)
-           ========================================
+        /* 7. ИНСТРУКЦИЯ (КАК НАЧАТЬ ИГРАТЬ) 
         */
-        .help-section {
-            margin-bottom: 40px;
-        }
-
         .help-trigger {
-            width: 100%;
-            background: #1c2231;
-            border: 1px solid var(--accent-blue);
-            color: #fff;
-            padding: 22px;
-            border-radius: 18px;
-            font-weight: 900;
-            font-size: 14px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            cursor: pointer;
+            width: 100%; background: #1c2231; border: 1px solid var(--accent-blue); color: #fff;
+            padding: 22px; border-radius: 18px; font-weight: 900; display: flex; justify-content: space-between; cursor: pointer;
         }
 
-        .help-body {
-            display: none;
-            background: #111622;
-            padding: 20px;
-            border-radius: 0 0 18px 18px;
-            border: 1px solid #242b3d;
-            border-top: none;
-            font-size: 14px;
-            color: var(--text-secondary);
-        }
-
-        /* ========================================
-           10. ФИНАЛЬНАЯ ЗАГЛУШКА (TIKTOK SHIELD)
-           ========================================
+        /* 8. ЗАГЛУШКА ТИКТОК (КРАСИВАЯ СТРЕЛКА) 
         */
         #tt-shield {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: var(--bg-main);
-            z-index: 999999;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 24px;
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--bg-main); z-index: 99999; flex-direction: column; align-items: center; justify-content: center; padding: 24px;
         }
 
-        .shield-arrow {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            font-size: 65px;
-            color: var(--accent-gold);
-            animation: arrow-jump 0.7s infinite alternate ease-in-out;
+        /* КРАСИВАЯ CSS СТРЕЛКА */
+        .custom-arrow {
+            position: absolute; top: 30px; right: 40px; width: 50px; height: 50px;
+            animation: arrow-anim 0.8s infinite alternate;
+        }
+        .custom-arrow::before {
+            content: ''; position: absolute; width: 30px; height: 30px;
+            border-top: 8px solid var(--accent-gold); border-right: 8px solid var(--accent-gold);
+            transform: rotate(-135deg); right: 0; top: 0;
+        }
+        .custom-arrow::after {
+            content: ''; position: absolute; width: 8px; height: 60px;
+            background: var(--accent-gold); transform: rotate(-45deg); right: 10px; top: -5px;
         }
 
-        @keyframes arrow-jump {
-            from { transform: translateY(0); }
-            to { transform: translateY(-18px); }
-        }
+        @keyframes arrow-anim { from { transform: translate(0, 0); } to { transform: translate(10px, -15px); } }
 
-        .shield-modal {
-            background-color: var(--bg-card);
-            border: 1px solid var(--accent-blue);
-            border-radius: 32px;
-            padding: 45px 25px;
-            text-align: center;
-            width: 100%;
-            max-width: 360px;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
-        }
-
-        .shield-icon {
-            font-size: 60px;
-            margin-bottom: 25px;
-            display: block;
-        }
-
-        .shield-h {
-            font-size: 24px;
-            font-weight: 900;
-            margin: 0 0 12px 0;
-        }
-
-        .shield-p {
-            color: var(--text-secondary);
-            font-size: 15px;
-            margin-bottom: 35px;
-            line-height: 1.5;
-        }
-
-        .shield-step {
-            background: rgba(255, 255, 255, 0.04);
-            border-radius: 18px;
-            padding: 16px;
-            margin-top: 12px;
-            display: flex;
-            align-items: center;
-            text-align: left;
-        }
-
-        .step-circle {
-            background-color: var(--accent-blue);
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 900;
-            margin-right: 15px;
-            flex-shrink: 0;
-        }
+        .shield-modal { background: var(--bg-card); border: 1px solid var(--accent-blue); border-radius: 32px; padding: 45px 25px; text-align: center; width: 100%; max-width: 360px; }
+        .shield-step { background: rgba(255, 255, 255, 0.04); border-radius: 18px; padding: 16px; margin-top: 12px; display: flex; align-items: center; text-align: left; }
+        .step-num { background: var(--accent-blue); width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 900; margin-right: 15px; flex-shrink: 0; }
     </style>
 </head>
 <body>
 
     <div id="wrapper-site">
-        
         <header class="header-stats">
-            <div class="stat-badge">
-                <span class="dot dot-red"></span> 
-                <span class="stat-online">2,860 Online</span>
-            </div>
-            <div class="stat-badge">
-                <span class="dot dot-green"></span> 
-                <span class="stat-win">+127 Win Today</span>
-            </div>
+            <div class="stat-badge"><span class="dot dot-red"></span> 2,860 Online</div>
+            <div class="stat-badge"><span class="dot dot-green"></span> +127 Win Today</div>
         </header>
 
         <section class="ticker-section">
             <div class="ticker-content">
-                <div class="winner-node"><span class="winner-id">ID: 429***</span> <span class="winner-amount">+₽10,492 🔥</span></div>
-                <div class="winner-node"><span class="winner-id">ID: 723***</span> <span class="winner-amount">+₽451,816 🚀</span></div>
-                <div class="winner-node"><span class="winner-id">ID: 105***</span> <span class="winner-amount">+₽1,200 💰</span></div>
-                <div class="winner-node"><span class="winner-id">ID: 882***</span> <span class="winner-amount">+₽25,700 🏆</span></div>
-                <div class="winner-node"><span class="winner-id">ID: 429***</span> <span class="winner-amount">+₽10,492 🔥</span></div>
-                <div class="winner-node"><span class="winner-id">ID: 723***</span> <span class="winner-amount">+₽451,816 🚀</span></div>
-                <div class="winner-node"><span class="winner-id">ID: 105***</span> <span class="winner-amount">+₽1,200 💰</span></div>
-                <div class="winner-node"><span class="winner-id">ID: 882***</span> <span class="winner-amount">+₽25,700 🏆</span></div>
+                <div class="winner-node"><span class="winner-id">ID: 429***</span> +₽10,492 🔥</div>
+                <div class="winner-node"><span class="winner-id">ID: 723***</span> +₽451,816 🚀</div>
+                <div class="winner-node"><span class="winner-id">ID: 105***</span> +₽1,200 💰</div>
+                <div class="winner-node"><span class="winner-id">ID: 882***</span> +₽25,700 🏆</div>
+                <div class="winner-node"><span class="winner-id">ID: 429***</span> +₽10,492 🔥</div>
+                <div class="winner-node"><span class="winner-id">ID: 723***</span> +₽451,816 🚀</div>
             </div>
         </section>
 
         <main class="app-container">
-            
-            <div class="games-layout">
-                <div class="game-item gold-border">
-                    <img src="mineslot.jpg" class="game-thumbnail" alt="Mineslot">
-                    <span class="game-label" style="color: var(--accent-gold);">Mineslot</span>
-                    <a href="LINK_GAME_1" class="action-btn btn-theme-green">ИГРАТЬ</a>
+            <div class="games-grid">
+                <div class="game-item gold">
+                    <img src="mineslot.jpg" class="game-thumbnail">
+                    <span style="color:var(--accent-gold); font-weight:900; font-size:12px; display:block; margin-bottom:10px;">MINESLOT</span>
+                    <a href="LINK1" class="btn-play bg-green">ИГРАТЬ</a>
                 </div>
-                <div class="game-item red-border">
-                    <img src="jumper.jpg" class="game-thumbnail" alt="Doodle Jump">
-                    <span class="game-label" style="color: var(--accent-red);">Doodle Jump</span>
-                    <a href="LINK_GAME_2" class="action-btn btn-theme-red">ИГРАТЬ</a>
+                <div class="game-item red">
+                    <img src="jumper.jpg" class="game-thumbnail">
+                    <span style="color:var(--accent-red); font-weight:900; font-size:12px; display:block; margin-bottom:10px;">DOODLE JUMP</span>
+                    <a href="LINK2" class="btn-play bg-red">ИГРАТЬ</a>
                 </div>
             </div>
 
             <section class="promo-banner">
-                <div class="promo-tag">АКЦИЯ ОГРАНИЧЕНА</div>
-                <h1 class="promo-title">25 000 RUB</h1>
-                <p class="promo-timer">ИСТЕКАЕТ ЧЕРЕЗ: <span class="timer-val" id="time-display">04:59</span></p>
-                <a href="LINK_BONUS" class="btn-get-bonus">ПОЛУЧИТЬ БОНУС СЕЙЧАС</a>
+                <div class="promo-label">ЛИМИТИРОВАННОЕ ПРЕДЛОЖЕНИЕ</div>
+                <h1 class="promo-amount">25 000 RUB</h1>
+                <p class="promo-timer">АКЦИЯ ИСТЕКАЕТ: <span class="timer-val" id="timer">04:59</span></p>
+                <a href="LINKB" class="btn-claim">ЗАБРАТЬ ПРЕДЛОЖЕНИЕ</a>
             </section>
 
-            <div class="info-card blue-variant">
-                <h3 class="info-card-title" style="color: var(--accent-blue);">⚡️ Мгновенная регистрация</h3>
-                <img src="reg-promo.png" class="info-card-img" alt="Registration">
+            <div class="info-card blue">
+                <div style="font-weight:900; text-transform:uppercase; color:var(--accent-blue);">⚡️ МГНОВЕННАЯ РЕГИСТРАЦИЯ</div>
+                <img src="reg-promo.png" class="info-img">
             </div>
 
-            <div class="info-card gold-variant">
-                <h3 class="info-card-title" style="color: var(--accent-gold);">💰 Бонус на первый депозит</h3>
-                <img src="bonus-promo.png" class="info-card-img" alt="Deposit Bonus">
+            <div class="info-card gold">
+                <div style="font-weight:900; text-transform:uppercase; color:var(--accent-gold);">💰 БОНУС НА ПЕРВЫЙ ДЕПОЗИТ</div>
+                <img src="bonus-promo.png" class="info-img">
             </div>
 
-            <div class="help-section">
-                <button class="help-trigger" onclick="toggleHelp()">
-                    КАК НАЧАТЬ ЗАРАБАТЫВАТЬ? <span>▼</span>
+            <div style="margin-bottom: 40px;">
+                <button class="help-trigger" onclick="document.getElementById('hp').style.display='block'">
+                    КАК НАЧАТЬ ИГРАТЬ? <span>▼</span>
                 </button>
-                <div id="help-panel" class="help-body">
-                    Для начала игры вам необходимо:<br><br>
-                    1. Выбрать одну из представленных игр выше.<br>
-                    2. Нажать на кнопку «ИГРАТЬ» для перехода на платформу.<br>
-                    3. Пройти простую процедуру регистрации.<br>
-                    4. После этого ваш приветственный бонус в размере до 25,000 RUB будет начислен на ваш баланс автоматически!
+                <div id="hp" style="display:none; padding:20px; background:#111622; border-radius:0 0 18px 18px; border:1px solid #242b3d; font-size:14px; color:var(--text-gray);">
+                    1. Выберите игру и нажмите играть.<br>2. Пройдите быструю регистрацию.<br>3. Ваш бонус будет начислен сразу!
                 </div>
             </div>
-
         </main>
     </div>
 
     <div id="tt-shield">
-        <div class="shield-arrow">↗</div>
+        <div class="custom-arrow"></div>
         <div class="shield-modal">
-            <span class="shield-icon">⚠️</span>
-            <h2 class="shield-h">Внимание!</h2>
-            <p class="shield-p">
-                Для корректной работы всех функций сайта и получения бонусов, пожалуйста, откройте страницу в основном браузере.
-            </p>
+            <span style="font-size:50px; display:block; margin-bottom:20px;">🔒</span>
+            <h2 style="font-weight:900; margin:0 0 10px;">Доступ ограничен</h2>
+            <p style="color:var(--text-gray); font-size:14px; margin-bottom:30px;">Чтобы получить доступ к игре и бонусам, откройте страницу в основном браузере.</p>
             
-            <div class="shield-step">
-                <div class="step-circle">1</div>
-                <span>Нажмите на <b>три точки (⋮)</b> в верхнем углу экрана</span>
-            </div>
-
-            <div class="shield-step">
-                <div class="step-circle">2</div>
-                <span>Выберите пункт <b>«Открыть в браузере»</b> или «Safari»</span>
-            </div>
+            <div class="shield-step"><div class="step-num">1</div><span>Нажмите на <b>три точки (⋮)</b> в углу</span></div>
+            <div class="shield-step"><div class="step-num">2</div><span>Выберите <b>«Открыть в Safari»</b> или браузере</span></div>
         </div>
     </div>
 
     <script>
-        /**
-         * Переключение видимости инструкции
-         */
-        function toggleHelp() {
-            const panel = document.getElementById('help-panel');
-            const isVisible = panel.style.display === 'block';
-            panel.style.display = isVisible ? 'none' : 'block';
+        function isTikTok() {
+            const ua = navigator.userAgent || navigator.vendor || window.opera;
+            return /TikTok|musical_ly|BytedanceWebview/i.test(ua);
         }
 
-        /**
-         * Улучшенный детектор TikTok браузеров
-         */
-        function detectTikTok() {
-            const agent = navigator.userAgent || navigator.vendor || window.opera;
-            const checks = [
-                /TikTok/i.test(agent),
-                /musical_ly/i.test(agent),
-                /BytedanceWebview/i.test(agent),
-                /SNCZ/i.test(agent) // Некоторые версии на Android
-            ];
-            return checks.some(check => check === true);
-        }
-
-        /**
-         * Инициализация при полной загрузке DOM
-         */
         window.addEventListener('DOMContentLoaded', () => {
-            
-            // ПРОВЕРКА НА ТИКТОК
-            if (detectTikTok()) {
-                // Скрываем сайт, показываем щит
+            if (isTikTok()) {
                 document.getElementById('wrapper-site').style.display = 'none';
                 document.getElementById('tt-shield').style.display = 'flex';
-                document.body.style.overflow = 'hidden';
             } else {
-                // ЗАПУСК ТАЙМЕРА
-                let secondsRemaining = 299;
-                const display = document.getElementById('time-display');
-
-                const countdown = setInterval(() => {
-                    const m = Math.floor(secondsRemaining / 60);
-                    const s = secondsRemaining % 60;
-
-                    display.textContent = `0${m}:${s < 10 ? '0' : ''}${s}`;
-
-                    if (secondsRemaining <= 0) {
-                        clearInterval(countdown);
-                    } else {
-                        secondsRemaining--;
-                    }
+                let timeLeft = 299;
+                setInterval(() => {
+                    const m = Math.floor(timeLeft / 60);
+                    const s = timeLeft % 60;
+                    document.getElementById('timer').textContent = `0${m}:${s < 10 ? '0' : ''}${s}`;
+                    if (timeLeft > 0) timeLeft--;
                 }, 1000);
             }
         });
