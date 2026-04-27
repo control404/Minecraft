@@ -8,8 +8,6 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <style>
-        /* 1. ОСНОВНЫЕ ПЕРЕМЕННЫЕ 
-        */
         :root {
             --bg-main: #05070a;
             --bg-card: #111622;
@@ -24,8 +22,7 @@
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body { margin: 0; padding: 0; background-color: var(--bg-main); color: var(--text-white); font-family: 'Inter', sans-serif; overflow-x: hidden; }
 
-        /* 2. ВЕРХНЯЯ СТАТИСТИКА 
-        */
+        /* ВЕРХНЯЯ СТАТИСТИКА */
         .header-stats {
             width: 100%;
             display: flex;
@@ -41,17 +38,15 @@
         .dot-red { background: var(--accent-red); box-shadow: 0 0 8px var(--accent-red); }
         .dot-green { background: var(--accent-green); box-shadow: 0 0 8px var(--accent-green); }
 
-        /* 3. БЕГУЩАЯ СТРОКА (УСКОРЕННАЯ) 
-        */
+        /* БЕГУЩАЯ СТРОКА (УСКОРЕННАЯ) */
         .ticker-section { width: 100%; background: #000; padding: 15px 0; border-bottom: 2px solid var(--accent-green); overflow: hidden; }
-        .ticker-content { display: flex; white-space: nowrap; animation: scroll-left 10s linear infinite; } /* Ускорил с 18s до 10s */
+        .ticker-content { display: flex; white-space: nowrap; animation: scroll-left 10s linear infinite; }
         .winner-node { display: flex; align-items: center; padding: 0 30px; font-size: 13px; font-weight: 800; color: var(--accent-green); }
         .winner-id { color: #fff; margin-right: 8px; }
 
         @keyframes scroll-left { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
 
-        /* 4. ГЛАВНЫЙ КОНТЕНТ 
-        */
+        /* ГЛАВНЫЙ КОНТЕНТ */
         .app-container { width: 100%; max-width: 500px; margin: 0 auto; padding: 20px 16px 60px 16px; }
 
         .games-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 25px; }
@@ -69,8 +64,7 @@
         .bg-green { background: linear-gradient(180deg, #44ff00 0%, #1a6b00 100%); }
         .bg-red { background: linear-gradient(180deg, #ff4b2b 0%, #b90000 100%); }
 
-        /* 5. БЛОК: ЛИМИТИРОВАННОЕ ПРЕДЛОЖЕНИЕ 
-        */
+        /* БЛОК: ЛИМИТИРОВАННОЕ ПРЕДЛОЖЕНИЕ */
         .promo-banner {
             background: linear-gradient(135deg, #163a24 0%, #0d0f17 100%);
             border: 3px solid var(--accent-green);
@@ -86,47 +80,44 @@
         .timer-val { color: var(--accent-red); font-weight: 900; }
         .btn-claim { background: var(--accent-green); color: #000; padding: 18px; border-radius: 16px; font-weight: 900; text-decoration: none; display: block; text-transform: uppercase; }
 
-        /* 6. ИНФО-КАРТОЧКИ 
-        */
+        /* ИНФО-КАРТОЧКИ */
         .info-card { background: var(--bg-card); border-radius: 24px; padding: 24px; margin-bottom: 20px; text-align: center; border: 2px solid transparent; }
         .info-card.blue { border-color: var(--accent-blue); }
         .info-card.gold { border-color: var(--accent-gold); }
         .info-img { width: 100%; border-radius: 16px; margin-top: 15px; }
 
-        /* 7. ИНСТРУКЦИЯ (КАК НАЧАТЬ ИГРАТЬ) 
-        */
+        /* ИНСТРУКЦИЯ (КАК НАЧАТЬ ИГРАТЬ) */
         .help-trigger {
             width: 100%; background: #1c2231; border: 1px solid var(--accent-blue); color: #fff;
             padding: 22px; border-radius: 18px; font-weight: 900; display: flex; justify-content: space-between; cursor: pointer;
         }
 
-        /* 8. ЗАГЛУШКА ТИКТОК (КРАСИВАЯ СТРЕЛКА) 
-        */
+        /* ЗАГЛУШКА ТИКТОК (ИСПРАВЛЕННАЯ СТРЕЛКА) */
         #tt-shield {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: var(--bg-main); z-index: 99999; flex-direction: column; align-items: center; justify-content: center; padding: 24px;
         }
 
-        /* КРАСИВАЯ CSS СТРЕЛКА */
+        /* ТОНКАЯ КРАСИВАЯ СТРЕЛКА */
         .custom-arrow {
-            position: absolute; top: 30px; right: 40px; width: 50px; height: 50px;
-            animation: arrow-anim 0.8s infinite alternate;
+            position: absolute; top: 30px; right: 40px; width: 40px; height: 40px;
+            animation: arrow-anim 0.8s infinite alternate ease-in-out;
         }
         .custom-arrow::before {
-            content: ''; position: absolute; width: 30px; height: 30px;
-            border-top: 8px solid var(--accent-gold); border-right: 8px solid var(--accent-gold);
+            content: ''; position: absolute; width: 20px; height: 20px;
+            border-top: 4px solid var(--accent-gold); border-right: 4px solid var(--accent-gold);
             transform: rotate(-135deg); right: 0; top: 0;
         }
         .custom-arrow::after {
-            content: ''; position: absolute; width: 8px; height: 60px;
-            background: var(--accent-gold); transform: rotate(-45deg); right: 10px; top: -5px;
+            content: ''; position: absolute; width: 4px; height: 50px;
+            background: var(--accent-gold); transform: rotate(-45deg); right: 8px; top: -5px;
         }
 
-        @keyframes arrow-anim { from { transform: translate(0, 0); } to { transform: translate(10px, -15px); } }
+        @keyframes arrow-anim { from { transform: translate(0, 0); } to { transform: translate(8px, -12px); } }
 
-        .shield-modal { background: var(--bg-card); border: 1px solid var(--accent-blue); border-radius: 32px; padding: 45px 25px; text-align: center; width: 100%; max-width: 360px; }
-        .shield-step { background: rgba(255, 255, 255, 0.04); border-radius: 18px; padding: 16px; margin-top: 12px; display: flex; align-items: center; text-align: left; }
-        .step-num { background: var(--accent-blue); width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 900; margin-right: 15px; flex-shrink: 0; }
+        .shield-modal { background: var(--bg-card); border: 1px solid var(--accent-blue); border-radius: 32px; padding: 40px 20px; text-align: center; width: 100%; max-width: 350px; }
+        .shield-step { background: rgba(255, 255, 255, 0.04); border-radius: 18px; padding: 14px; margin-top: 10px; display: flex; align-items: center; text-align: left; border: 1px solid rgba(255,255,255,0.05); }
+        .step-num { background: var(--accent-blue); width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 900; margin-right: 12px; flex-shrink: 0; font-size: 12px; }
     </style>
 </head>
 <body>
@@ -193,12 +184,13 @@
     <div id="tt-shield">
         <div class="custom-arrow"></div>
         <div class="shield-modal">
-            <span style="font-size:50px; display:block; margin-bottom:20px;">🔒</span>
-            <h2 style="font-weight:900; margin:0 0 10px;">Доступ ограничен</h2>
-            <p style="color:var(--text-gray); font-size:14px; margin-bottom:30px;">Чтобы получить доступ к игре и бонусам, откройте страницу в основном браузере.</p>
+            <span style="font-size:50px; display:block; margin-bottom:15px;">⚠️</span>
+            <h2 style="font-weight:900; margin:0 0 10px; font-size:24px;">ОТКРЫТЬ В БРАУЗЕРЕ</h2>
+            <p style="color:var(--text-gray); font-size:14px; margin-bottom:25px;">Чтобы открыть игру, нажмите на <b>3 точки</b> в правом верхнем углу и выберите <b>«Открыть в браузере»</b></p>
             
-            <div class="shield-step"><div class="step-num">1</div><span>Нажмите на <b>три точки (⋮)</b> в углу</span></div>
-            <div class="shield-step"><div class="step-num">2</div><span>Выберите <b>«Открыть в Safari»</b> или браузере</span></div>
+            <div class="shield-step"><div class="step-num">1</div><span>Нажмите на <b>... (три точки)</b></span></div>
+            <div class="shield-step"><div class="step-num">2</div><span>Выберите <b>«Открыть в браузере»</b></span></div>
+            <div class="shield-step"><div class="step-num">3</div><span>Наслаждайтесь игрой!</span></div>
         </div>
     </div>
 
