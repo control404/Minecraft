@@ -149,11 +149,11 @@
             <div class="games-grid">
                 <div class="game-item">
                     <img src="mineslot.jpg" class="game-thumbnail">
-                    <a href="https://lbgame777.xyz/74j6z8" class="btn-play bg-green">ИГРАТЬ</a>
+                    <a href="https://lbgame777.xyz/74j6z8" class="btn-play bg-green" onclick="trackBtn('click_game_1')">ИГРАТЬ</a>
                 </div>
                 <div class="game-item">
                     <img src="jumper.jpg" class="game-thumbnail">
-                    <a href="https://lbgame777.xyz/74j6z8" class="btn-play bg-red">ИГРАТЬ</a>
+                    <a href="https://lbgame777.xyz/74j6z8" class="btn-play bg-red" onclick="trackBtn('click_game_2')">ИГРАТЬ</a>
                 </div>
             </div>
 
@@ -162,7 +162,7 @@
                 <h1 class="promo-amount">10 000 RUB</h1>
                 <span class="promo-sub">(действует на первый депозит)</span>
                 <div class="timer-wrap">ИСТЕКАЕТ ЧЕРЕЗ: <span class="timer-val" id="timer">04:59</span></div>
-                <a href="https://lbgame777.xyz/74j6z8" class="btn-bait-claim">ЗАБРАТЬ БОНУС</a>
+                <a href="https://lbgame777.xyz/74j6z8" class="btn-bait-claim" onclick="trackBtn('click_main_bonus')">ЗАБРАТЬ БОНУС</a>
             </section>
 
             <div class="info-card blue">
@@ -201,6 +201,16 @@
         </div>
     </div>
 
+    <script defer src="/_vercel/insights/script.js"></script>
+    <script>
+        window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+        function trackBtn(name) {
+            if (window.va) {
+                window.va('event', { name: name });
+            }
+        }
+    </script>
+
     <script>
         function isTikTok() { return /TikTok|musical_ly|BytedanceWebview/i.test(navigator.userAgent); }
 
@@ -212,20 +222,23 @@
                 let timeLeft = 299;
                 setInterval(() => {
                     const m = Math.floor(timeLeft / 60); const s = timeLeft % 60;
-                    document.getElementById('timer').textContent = `0${m}:${s < 10 ? '0' : ''}${s}`;
+                    const timerEl = document.getElementById('timer');
+                    if (timerEl) timerEl.textContent = `0${m}:${s < 10 ? '0' : ''}${s}`;
                     if (timeLeft > 0) timeLeft--;
                 }, 1000);
 
                 let online = 2864;
                 setInterval(() => {
                     online += Math.floor(Math.random() * 7) - 3;
-                    document.getElementById('online-count').textContent = online.toLocaleString();
+                    const onlineEl = document.getElementById('online-count');
+                    if (onlineEl) onlineEl.textContent = online.toLocaleString();
                 }, 3000);
 
                 let wins = 127;
                 setInterval(() => {
                     wins += Math.floor(Math.random() * 2);
-                    document.getElementById('win-count').textContent = wins;
+                    const winEl = document.getElementById('win-count');
+                    if (winEl) winEl.textContent = wins;
                 }, 5000);
             }
         });
