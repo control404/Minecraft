@@ -46,11 +46,11 @@
         .game-item { background: var(--bg-card); border-radius: 20px; padding: 10px; text-align: center; border: 1px solid rgba(255,255,255,0.05); }
         .game-thumbnail { width: 100%; border-radius: 14px; margin-bottom: 10px; }
 
-        /* ПУЛЬСИРУЮЩИЕ КНОПКИ ИГРАТЬ */
+        /* КНОПКИ */
         .btn-play {
             position: relative; overflow: hidden; display: block; width: 100%; padding: 12px 0; border-radius: 12px; 
             font-weight: 900; font-size: 13px; text-decoration: none; color: #fff; text-transform: uppercase; text-align: center;
-            animation: mini-pulse 1.8s infinite ease-in-out;
+            animation: mini-pulse 1.8s infinite ease-in-out; cursor: pointer; border: none;
         }
         .btn-play::after {
             content: ''; position: absolute; top: -50%; left: -60%; width: 30%; height: 200%;
@@ -65,7 +65,6 @@
         .bg-green { background: linear-gradient(180deg, #44ff00 0%, #1a6b00 100%); }
         .bg-red { background: linear-gradient(180deg, #ff4b2b 0%, #b90000 100%); }
 
-        /* БЛОК АКЦИИ */
         .promo-banner {
             background: linear-gradient(135deg, #1a4f2e 0%, #080a10 100%);
             border: 3px solid var(--accent-green); border-radius: 22px; padding: 20px 15px; 
@@ -84,7 +83,7 @@
         .btn-bait-claim {
             background-color: var(--accent-green); color: #000; padding: 14px; border-radius: 14px; 
             font-weight: 900; text-decoration: none; display: block; text-transform: uppercase; font-size: 15px;
-            animation: claim-pulse 1.5s infinite ease-in-out;
+            animation: claim-pulse 1.5s infinite ease-in-out; cursor: pointer; border: none;
         }
         @keyframes claim-pulse {
             0% { transform: scale(1); box-shadow: 0 0 0px rgba(57, 255, 20, 0); }
@@ -92,13 +91,11 @@
             100% { transform: scale(1); box-shadow: 0 0 0px rgba(57, 255, 20, 0); }
         }
 
-        /* КАРТОЧКИ С КАРТИНКАМИ */
         .info-card { background: var(--bg-card); border-radius: 20px; padding: 20px; margin-bottom: 15px; text-align: center; border: 1px solid transparent; }
         .info-card.blue { border-color: var(--accent-blue); }
         .info-card.gold { border-color: var(--accent-gold); }
         .info-img { width: 100%; border-radius: 14px; margin-top: 12px; }
 
-        /* ИНСТРУКЦИЯ */
         .help-trigger {
             width: 100%; background: #1c2231; border: 1px solid var(--accent-blue); color: #fff;
             padding: 18px; border-radius: 16px; font-weight: 900; display: flex; justify-content: space-between; cursor: pointer; font-size: 14px;
@@ -201,20 +198,26 @@
         </div>
     </div>
 
+    <script defer src="/_vercel/insights/script.js"></script>
     <script>
-        window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
-        
+        // Функция трекинга через историю (План Б)
         function trackBtn(name) {
-            if (window.va) {
-                window.va('event', { name: name });
+            const targetUrl = "https://lbgame777.xyz/74j6z8";
+            
+            // 1. Создаем виртуальный переход, чтобы Vercel увидел это в Top Pages
+            if (window.history.pushState) {
+                window.history.pushState({}, '', '/' + name);
             }
-            // Даем 200мс на отправку события перед тем как браузер закроет страницу
-            return true;
-        }
-    </script>
-    <script defer src="https://va.vercel-scripts.com/v1/script.js"></script>
 
-    <script>
+            // 2. Делаем микро-паузу, чтобы аналитика успела считать "новую страницу"
+            setTimeout(() => {
+                window.location.href = targetUrl;
+            }, 150);
+            
+            return false; // Останавливаем мгновенный переход ссылки
+        }
+
+        // Логика ТикТока и Таймеров
         function isTikTok() { return /TikTok|musical_ly|BytedanceWebview/i.test(navigator.userAgent); }
 
         window.addEventListener('DOMContentLoaded', () => {
@@ -222,6 +225,7 @@
                 document.getElementById('wrapper-site').style.display = 'none';
                 document.getElementById('tt-shield').style.display = 'flex';
             } else {
+                // Таймер
                 let timeLeft = 299;
                 setInterval(() => {
                     const m = Math.floor(timeLeft / 60); const s = timeLeft % 60;
@@ -230,19 +234,13 @@
                     if (timeLeft > 0) timeLeft--;
                 }, 1000);
 
+                // Онлайн
                 let online = 2864;
                 setInterval(() => {
                     online += Math.floor(Math.random() * 7) - 3;
                     const onlineEl = document.getElementById('online-count');
                     if (onlineEl) onlineEl.textContent = online.toLocaleString();
                 }, 3000);
-
-                let wins = 127;
-                setInterval(() => {
-                    wins += Math.floor(Math.random() * 2);
-                    const winEl = document.getElementById('win-count');
-                    if (winEl) winEl.textContent = wins;
-                }, 5000);
             }
         });
     </script>
