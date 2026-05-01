@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, sans-serif; background: #000; color: white; padding: 20px; }
+        .card { background: #1c1c1e; padding: 20px; border-radius: 15px; margin-bottom: 20px; border: 1px solid #333; }
+        input { width: 100%; padding: 12px; margin: 10px 0; border-radius: 10px; border: 1px solid #444; background: #2c2c2e; color: white; box-sizing: border-box; }
+        button { width: 100%; padding: 15px; background: #007aff; border: none; color: white; border-radius: 10px; font-weight: bold; font-size: 16px; }
+        .stat-item { padding: 10px 0; border-bottom: 1px solid #333; font-size: 14px; }
+        .stat-item:last-child { border: none; }
+        h3 { margin-top: 0; color: #007aff; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h3>🔗 Управление ссылкой</h3>
+        <p style="font-size: 12px; color: #888;">Эта ссылка сейчас установлена в базе:</p>
+        <input type="text" id="urlInput" placeholder="https://new-offer.com">
+        <button onclick="updateLink()">Обновить ссылку</button>
+        <div id="status" style="text-align: center; margin-top: 10px; font-size: 14px;"></div>
+    </div>
+
+    <div class="card">
+        <h3>📊 Последние клики</h3>
+        <div id="statsList">Загрузка данных...</div>
+    </div>
+
+    <script>
+        const tg = window.Telegram.WebApp;
+        tg.expand();
+        tg.ready();
+
+        // ДАННЫЕ ИЗ SUPABASE (СКОПИРУЙ ИЗ API/GO.JS)
+        const S_URL = 'https://exlicdagocuvbjgjcdjv.supabase.co';
+        const S_KEY = 'sb_publishable_WCWYAHvWLJoKblmD5q9Tcw_jqWQVEAu';
+
+        const supabaseClient = supabase.createClient(S_URL, S_KEY);
+
+        async function init() {
+            // 1. Получаем текущую ссылку
+            const { data: settings } = await supabaseClient.from('site_settings').select('url').eq('id', 'main_link').single();
+            if (settings) document.getElementById('urlInput').value = settings.url;
+
+            // 2. Получаем последние 5 кликов
+            const { data: stats } = await supabaseClient.from('click_stats').select('*').order('created_at', { ascending: false }).limit(5);
+            if (stats) {
+                document.getElementById('statsList').innerHTML = stats.map(s => 
+                    `<div class="stat-item">
+                        <b>${s.button_id}</b> <br>
+                        <span style="color:#888; font-size:11px;">${new Date(s.created_at).toLocaleString()} | IP: ${s.user_ip}</span>
+                    </div>`
+                ).join('');
+            }
+        }
+
+        async function updateLink() {
+            const newUrl = document.getElementById('urlInput').value;
+            const statusDiv = document.getElementById('status');
+            
+            const { error } = await supabaseClient.from('site_settings').update({ url: newUrl }).eq('id', 'main_link');
+            
+            if (!error) {
+                statusDiv.innerText = '✅ Успешно сохранено!';
+                statusDiv.style.color = '#4cd964';
+                tg.HapticFeedback.notificationOccurred('success');
+            } else {
+                statusDiv.innerText = '❌ Ошибка записи';
+                statusDiv.style.color = '#ff3b30';
+            }
+        }
+
+        init();
+    </script>
+</body>
+</html>
