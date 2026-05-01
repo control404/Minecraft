@@ -1,5 +1,8 @@
 {
+  "version": 2,
+  "public": true,
   "rewrites": [
-    { "source": "/click", "destination": "/api/go" }
+    { "source": "/click", "destination": "/api/go" },
+    { "source": "/admin", "destination": "/admin.html" }
   ]
 }
