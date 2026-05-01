@@ -2,20 +2,19 @@ export default async function handler(req, res) {
     const botToken = '8606085102:AAGYTrjx6BjMYh_GXtw7o1vRz4zSiieHMCA';
     const chatId = '-1003769181399';
     
-    const source = req.query.from || 'Прямой переход';
-    const country = req.headers['x-vercel-ip-country'] || '??';
-    const city = req.headers['x-vercel-ip-city'] || '??';
+    // Получаем параметры. Если их нет, код не упадет, а подставит текст в кавычках.
+    const source = req.query.from || "unknown";
+    const country = req.headers['x-vercel-ip-country'] || "no-country";
     
-    const message = `🚀 Клик!\n📍 Источник: ${source}\n🌍 ГЕО: ${country} (${city})`;
-    const url = `https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(message)}`;
+    const text = `Click! Source: ${source}, Country: ${country}`;
 
     try {
-        // Ждем, пока телеграм подтвердит получение
-        await fetch(url);
+        // Простейший GET запрос без сложных объектов
+        await fetch(`https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(text)}`);
     } catch (e) {
-        console.error("Ошибка:", e);
+        // Даже если ТГ выдаст ошибку, редирект всё равно сработает
     }
 
-    // Только после этого делаем редирект
-    res.redirect(302, 'https://craftdudl.site');
+    res.writeHead(302, { Location: 'https://craftdudl.site' });
+    res.end();
 }
