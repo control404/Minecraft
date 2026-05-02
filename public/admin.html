@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Admin Panel</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --blue: #007aff;
+            --red: #ff3b30;
+            --green: #34c759;
+            --bg: #000;
+        }
+
+        body {
+            margin: 0; padding: 0;
+            font-family: -apple-system, system-ui, sans-serif;
+            background-color: var(--bg);
+            color: white;
+            overflow-x: hidden;
+        }
+
+        #bg-canvas {
+            position: fixed; top: 0; left: 0; z-index: -1;
+            filter: blur(80px); opacity: 0.25;
+        }
+
+        .container { padding: 25px 20px; }
+
+        .header { text-align: center; margin-bottom: 40px; }
+        .header h1 { font-size: 12px; text-transform: uppercase; letter-spacing: 4px; color: #555; margin: 0; }
+        .header .domain { font-size: 26px; font-weight: 900; margin-top: 8px; color: var(--green); }
+
+        .stats-title { font-size: 22px; font-weight: 900; color: #fff; margin-bottom: 20px; text-align: center; }
+
+        .glass-card {
+            background: rgba(30, 30, 32, 0.7);
+            backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 28px;
+            padding: 25px;
+            margin-bottom: 25px;
+        }
+
+        /* Главные показатели (Белые и жирные) */
+        .main-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; text-align: center; }
+        .stat-val { font-size: 52px; font-weight: 900; color: #fff; line-height: 1; }
+        .stat-lbl { font-size: 12px; color: #888; text-transform: uppercase; margin-top: 12px; font-weight: 600; }
+
+        /* Кнопки меню */
+        .btn-menu {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: white;
+            padding: 24px;
+            border-radius: 20px;
+            width: 100%;
+            font-size: 16px;
+            font-weight: 800;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: 0.2s;
+        }
+        .btn-menu:active { background: rgba(255,255,255,0.1); transform: scale(0.98); }
+
+        /* Табы управления графиком */
+        .chart-controls { display: flex; gap: 10px; margin-bottom: 20px; }
+        .tab-btn {
+            flex: 1; padding: 16px; border-radius: 14px; border: none;
+            background: rgba(255,255,255,0.06); color: #888; font-weight: 700; font-size: 13px;
+        }
+        .tab-btn.active.blue { background: var(--blue); color: white; }
+        .tab-btn.active.red { background: var(--red); color: white; }
+
+        /* Статистика по кнопкам */
+        .btn-row {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 18px 22px; background: rgba(255,255,255,0.04);
+            border-radius: 18px; margin-bottom: 10px; border: 1px solid rgba(255,255,255,0.02);
+        }
+        .btn-name { font-weight: 700; color: #eee; font-size: 15px; }
+        .btn-count { font-weight: 900; color: var(--green); font-size: 20px; }
+
+        .section { display: none; }
+        .section.active { display: block; animation: slideUp 0.4s ease-out; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        input {
+            width: 100%; padding: 20px; background: #1c1c1e; border: 1px solid #333;
+            border-radius: 16px; color: white; margin: 20px 0; box-sizing: border-box; font-size: 17px;
+        }
+        .save-btn { background: var(--green); color: #000; border: none; padding: 20px; border-radius: 16px; width: 100%; font-weight: 900; font-size: 16px; }
+    </style>
+</head>
+<body>
+
+<canvas id="bg-canvas"></canvas>
+
+<div class="container">
+    <div class="header">
+        <h1>АДМИН-ПАНЕЛЬ</h1>
+        <div class="domain">CRAFTDUDL.SITE</div>
+    </div>
+
+    <!-- ГЛАВНЫЙ ЭКРАН -->
+    <div id="main-screen" class="section active">
+        <div class="stats-title">Статистика за сегодня</div>
+        
+        <div class="glass-card">
+            <div class="main-stats">
+                <div class="box">
+                    <div class="stat-val" id="v-count">0</div>
+                    <div class="stat-lbl">Визиты</div>
+                </div>
+                <div class="box">
+                    <div class="stat-val" id="c-count">0</div>
+                    <div class="stat-lbl">Клики</div>
+                </div>
+            </div>
+        </div>
+
+        <button class="btn-menu" onclick="showSection('stats-screen')">
+            ПОДРОБНАЯ СТАТИСТИКА <span>→</span>
+        </button>
+        <button class="btn-menu" onclick="showSection('link-screen')">
+            НАСТРОЙКА ССЫЛКИ <span>🔗</span>
+        </button>
+    </div>
+
+    <!-- ПОДРОБНАЯ СТАТИСТИКА -->
+    <div id="stats-screen" class="section">
+        <button onclick="showSection('main-screen')" style="background:none; border:none; color:var(--blue); font-weight:800; margin-bottom:20px; font-size:16px;">← НАЗАД</button>
+        
+        <div class="chart-controls">
+            <button id="btnVisits" class="tab-btn active blue" onclick="toggleDataset(0)">ПОСЕЩЕНИЯ</button>
+            <button id="btnClicks" class="tab-btn active red" onclick="toggleDataset(1)">КЛИКИ</button>
+        </div>
+
+        <div class="glass-card" style="padding: 15px;">
+            <canvas id="detailedChart" height="280"></canvas>
+        </div>
+
+        <div class="stats-title" style="text-align: left; font-size: 18px; margin-top: 10px;">Эффективность кнопок</div>
+        <div id="btn-stats-container">
+            <!-- Данные по кнопкам -->
+        </div>
+    </div>
+
+    <!-- СМЕНА ССЫЛКИ -->
+    <div id="link-screen" class="section">
+        <button onclick="showSection('main-screen')" style="background:none; border:none; color:var(--blue); font-weight:800; margin-bottom:20px; font-size:16px;">← НАЗАД</button>
+        <div class="stats-title">Управление редиректом</div>
+        <div class="glass-card">
+            <input type="text" id="urlInput" placeholder="https://ссылка-на-казино.com">
+            <button class="save-btn" onclick="saveLink()">СОХРАНИТЬ ИЗМЕНЕНИЯ</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    const tg = window.Telegram.WebApp;
+    tg.expand();
+
+    const S_URL = 'https://exlicdagocuvbjgjcdjv.supabase.co';
+    const S_KEY = 'ТВОЙ_КЛЮЧ_ОТ_SUPABASE'; 
+    const supabaseClient = supabase.createClient(S_URL, S_KEY);
+
+    let fullChart;
+
+    async function init() {
+        const { data: clicks } = await supabaseClient.from('click_stats').select('*');
+        const { data: settings } = await supabaseClient.from('site_settings').select('url').eq('id', 'main_link').single();
+        
+        if(settings) document.getElementById('urlInput').value = settings.url;
+
+        const today = new Date().toISOString().split('T')[0];
+        const todayData = clicks.filter(c => c.created_at.startsWith(today));
+        
+        document.getElementById('v-count').innerText = todayData.length;
+        document.getElementById('c-count').innerText = todayData.length;
+
+        renderDetailedChart(clicks);
+        renderButtonStats(clicks);
+    }
+
+    function renderDetailedChart(allData) {
+        const ctx = document.getElementById('detailedChart').getContext('2d');
+        const statsByDay = {};
+        allData.forEach(d => {
+            const day = d.created_at.split('T')[0].split('-').reverse().slice(0,2).join('.');
+            statsByDay[day] = (statsByDay[day] || 0) + 1;
+        });
+
+        const labels = Object.keys(statsByDay).slice(-7);
+        const values = Object.values(statsByDay).slice(-7);
+
+        fullChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: 'Посещения',
+                        data: values,
+                        borderColor: '#007aff',
+                        borderWidth: 4,
+                        tension: 0.3,
+                        pointRadius: 4,
+                        pointBackgroundColor: '#007aff'
+                    },
+                    {
+                        label: 'Клики',
+                        data: values.map(v => Math.floor(v * 0.9)),
+                        borderColor: '#ff3b30',
+                        borderWidth: 4,
+                        tension: 0.3,
+                        pointRadius: 4,
+                        pointBackgroundColor: '#ff3b30'
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true, // Всегда с нуля
+                        grid: { color: 'rgba(255,255,255,0.05)' },
+                        ticks: { color: '#666', font: { size: 11 } }
+                    },
+                    x: {
+                        grid: { display: false },
+                        ticks: { color: '#666', font: { size: 11 } }
+                    }
+                },
+                plugins: { legend: { display: false } }
+            }
+        });
+    }
+
+    function renderButtonStats(allData) {
+        const container = document.getElementById('btn-stats-container');
+        container.innerHTML = '';
+        const buttons = [
+            { id: 'btn1', name: 'Кнопка 1' },
+            { id: 'btn2', name: 'Кнопка 2' },
+            { id: 'bonus', name: 'Получить бонус' }
+        ];
+
+        buttons.forEach(btn => {
+            const count = allData.filter(item => item.button_id === btn.id).length;
+            const row = document.createElement('div');
+            row.className = 'btn-row';
+            row.innerHTML = `
+                <div class="btn-name">${btn.name}</div>
+                <div class="btn-count">${count}</div>
+            `;
+            container.appendChild(row);
+        });
+    }
+
+    function toggleDataset(index) {
+        const meta = fullChart.getDatasetMeta(index);
+        meta.hidden = meta.hidden === null ? !fullChart.data.datasets[index].hidden : null;
+        const btn = index === 0 ? document.getElementById('btnVisits') : document.getElementById('btnClicks');
+        btn.classList.toggle('active');
+        fullChart.update();
+        tg.HapticFeedback.impactOccurred('light');
+    }
+
+    function showSection(id) {
+        document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+        tg.HapticFeedback.impactOccurred('medium');
+    }
+
+    async function saveLink() {
+        const url = document.getElementById('urlInput').value;
+        const { error } = await supabaseClient.from('site_settings').update({ url }).eq('id', 'main_link');
+        if(!error) {
+            tg.showAlert('Готово! Ссылка на казино обновлена.');
+            tg.HapticFeedback.notificationOccurred('success');
+        }
+    }
+
+    // Фон
+    const canvas = document.getElementById('bg-canvas');
+    const bctx = canvas.getContext('2d');
+    let pts = [];
+    function binit() {
+        canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+        for(let i=0; i<3; i++) pts.push({x: Math.random()*canvas.width, y: Math.random()*canvas.height, vx: Math.random()*0.4-0.2, vy: Math.random()*0.4-0.2});
+    }
+    function banim() {
+        bctx.clearRect(0,0,canvas.width, canvas.height);
+        pts.forEach(p => {
+            p.x+=p.vx; p.y+=p.vy;
+            if(p.x<0 || p.x>canvas.width) p.vx*=-1;
+            if(p.y<0 || p.y>canvas.height) p.vy*=-1;
+            let g = bctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, 700);
+            g.addColorStop(0, 'rgba(0, 255, 136, 0.12)'); g.addColorStop(1, 'transparent');
+            bctx.fillStyle = g; bctx.fillRect(0,0,canvas.width, canvas.height);
+        });
+        requestAnimationFrame(banim);
+    }
+
+    binit(); banim(); init();
+</script>
+</body>
+</html>
