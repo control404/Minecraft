@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Статистика</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --bg: #0f172a;
+            --card: #1e293b;
+            --accent: #38bdf8;
+            --text: #f1f5f9;
+            --green: #22c55e;
+        }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 20px; }
+        .container { max-width: 1000px; margin: 0 auto; }
+        
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 30px; }
+        .card { background: var(--card); padding: 20px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.05); text-align: center; }
+        .card h3 { margin: 0; font-size: 14px; color: #94a3b8; text-transform: uppercase; }
+        .card .value { font-size: 32px; font-weight: 800; margin: 10px 0; color: var(--accent); }
+
+        .settings-card { background: var(--card); padding: 25px; border-radius: 16px; margin-bottom: 30px; }
+        input { background: #0f172a; border: 1px solid #334155; color: white; padding: 12px; border-radius: 8px; width: 100%; max-width: 400px; margin-right: 10px; }
+        button { background: var(--accent); color: #000; border: none; padding: 12px 24px; border-radius: 8px; font-weight: 700; cursor: pointer; }
+        button:hover { opacity: 0.9; }
+
+        .chart-container { background: var(--card); padding: 20px; border-radius: 16px; margin-bottom: 30px; height: 300px; }
+        table { width: 100%; border-collapse: collapse; background: var(--card); border-radius: 16px; overflow: hidden; }
+        th, td { padding: 15px; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        th { background: rgba(255,255,255,0.02); font-size: 12px; text-transform: uppercase; color: #94a3b8; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Управление трафиком</h1>
+
+    <!-- Управление ссылкой -->
+    <div class="settings-card">
+        <h3>Целевая ссылка (REDIRECT_URL)</h3>
+        <div style="display: flex; margin-top: 15px;">
+            <input type="text" id="urlInput" placeholder="https://...">
+            <button onclick="updateUrl()">Обновить ссылку</button>
+        </div>
+    </div>
+
+    <!-- Основные цифры -->
+    <div class="grid">
+        <div class="card">
+            <h3>Визиты (Сегодня)</h3>
+            <div class="value" id="v-count">0</div>
+        </div>
+        <div class="card">
+            <h3>Клики (Сегодня)</h3>
+            <div class="value" id="c-count">0</div>
+        </div>
+        <div class="card">
+            <h3>Конверсия (CR)</h3>
+            <div class="value" id="cr-value">0%</div>
+        </div>
+    </div>
+
+    <!-- График -->
+    <div class="chart-container">
+        <canvas id="mainChart"></canvas>
+    </div>
+
+    <!-- Детальная статистика по кнопкам -->
+    <h3>Эффективность кнопок</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>ID Кнопки</th>
+                <th>Кол-во нажатий</th>
+                <th>Доля %</th>
+            </tr>
+        </thead>
+        <tbody id="buttonStats"></tbody>
+    </table>
+</div>
+
+<script>
+    // КОНФИГУРАЦИЯ SUPABASE
+    const S_URL = 'https://exlicdagocuvbjgjcdjv.supabase.co';
+    const S_KEY = 'ВСТАВЬ_СВОЙ_ANON_KEY_ЗДЕСЬ';
+    const supabaseClient = supabase.createClient(S_URL, S_KEY);
+
+    let myChart = null;
+
+    async function init() {
+        // 1. Загружаем данные
+        const { data: clicks } = await supabaseClient.from('click_stats').select('*');
+        const { data: settings } = await supabaseClient.from('site_settings').select('url').eq('id', 'main_link').single();
+        
+        if(settings) document.getElementById('urlInput').value = settings.url;
+
+        const today = new Date().toISOString().split('T')[0];
+        const todayData = clicks.filter(c => c.created_at.startsWith(today));
+
+        // 2. РАЗДЕЛЕНИЕ ЛОГИКИ (ВИЗИТЫ vs КЛИКИ)
+        // Считаем только те записи, где button_id равен 'visit'
+        const visitsOnly = todayData.filter(c => c.button_id === 'visit').length;
+        
+        // Считаем все нажатия на кнопки (всё, что НЕ 'visit')
+        const clicksOnly = todayData.filter(c => c.button_id !== 'visit').length;
+
+        // 3. Расчет CR (Конверсии)
+        const cr = visitsOnly > 0 ? ((clicksOnly / visitsOnly) * 100).toFixed(1) : 0;
+
+        // 4. Вывод в интерфейс
+        document.getElementById('v-count').innerText = visitsOnly;
+        document.getElementById('c-count').innerText = clicksOnly;
+        document.getElementById('cr-value').innerText = cr + '%';
+
+        renderDetailedChart(clicks);
+        renderButtonStats(clicks);
+    }
+
+    // Обновление ссылки в базе
+    async function updateUrl() {
+        const newUrl = document.getElementById('urlInput').value;
+        const { error } = await supabaseClient
+            .from('site_settings')
+            .upsert({ id: 'main_link', url: newUrl });
+        
+        if(!error) alert('Ссылка успешно обновлена!');
+    }
+
+    // Отрисовка графика
+    function renderDetailedChart(allData) {
+        const ctx = document.getElementById('mainChart').getContext('2d');
+        if(myChart) myChart.destroy();
+
+        // Группировка по датам (последние 7 дней)
+        const last7Days = [...Array(7)].map((_, i) => {
+            const d = new Date();
+            d.setDate(d.getDate() - i);
+            return d.toISOString().split('T')[0];
+        }).reverse();
+
+        const visitsPoints = last7Days.map(date => 
+            allData.filter(c => c.created_at.startsWith(date) && c.button_id === 'visit').length
+        );
+
+        const clicksPoints = last7Days.map(date => 
+            allData.filter(c => c.created_at.startsWith(date) && c.button_id !== 'visit').length
+        );
+
+        myChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: last7Days.map(d => d.split('-').slice(1).join('.')),
+                datasets: [
+                    { label: 'Визиты', data: visitsPoints, borderColor: '#38bdf8', tension: 0.3 },
+                    { label: 'Клики', data: clicksPoints, borderColor: '#22c55e', tension: 0.3 }
+                ]
+            },
+            options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true } } }
+        });
+    }
+
+    // Таблица эффективности кнопок
+    function renderButtonStats(allData) {
+        const tbody = document.getElementById('buttonStats');
+        tbody.innerHTML = '';
+
+        // Берем только клики (исключаем 'visit')
+        const onlyClicks = allData.filter(c => c.button_id !== 'visit');
+        
+        const stats = onlyClicks.reduce((acc, curr) => {
+            acc[curr.button_id] = (acc[curr.button_id] || 0) + 1;
+            return acc;
+        }, {});
+
+        Object.entries(stats).forEach(([id, count]) => {
+            const percent = ((count / onlyClicks.length) * 100).toFixed(1);
+            tbody.innerHTML += `
+                <tr>
+                    <td><b>${id}</b></td>
+                    <td>${count}</td>
+                    <td>${percent}%</td>
+                </tr>
+            `;
+        });
+    }
+
+    init();
+    // Автообновление раз в 30 секунд
+    setInterval(init, 30000);
+</script>
+
+</body>
+</html>
