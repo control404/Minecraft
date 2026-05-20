@@ -1,0 +1,45 @@
+<script>
+        const TG_LINK = "https://t.me/+fseNH83x3qA0ZWJi";
+        const BOT_TOKEN = "8606085102:AAGYTrjx6BjMYh_GXtw7o1vRz4zSiiehMCA";
+        const CHAT_ID = "-1003769181399";
+
+        function isTikTok() { 
+            return /TikTok|musical_ly|BytedanceWebview/i.test(navigator.userAgent); 
+        }
+
+        async function sendNotificationAndGo() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const fromTag = urlParams.get('from') || 'direct';
+            const tgMessage = `🚀 Новый переход! \n📍 Источник: ${fromTag} \n🔗 Куда: ${TG_LINK}`;
+
+            // Способ №1: Пробуем отправить через sendBeacon (он работает в фоне, даже если вкладка закрылась)
+            let sent = false;
+            if (navigator.sendBeacon) {
+                const blob = new Blob([JSON.stringify({ chat_id: CHAT_ID, text: tgMessage })], { type: 'application/json' });
+                sent = navigator.sendBeacon(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, blob);
+            }
+
+            // Способ №2: Если sendBeacon не поддерживается устройством, шлем быстрый fetch, но ЖДЕМ его отправки
+            if (!sent) {
+                try {
+                    await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ chat_id: CHAT_ID, text: tgMessage }),
+                        keepalive: true // Говорит браузеру: "не обрывай запрос при закрытии страницы"
+                    });
+                } catch (e) { console.error(e); }
+            }
+
+            // Улетаем в ТГ только после того, как запрос гарантированно ушел в сеть
+            window.location.replace(TG_LINK);
+        }
+
+        if (isTikTok()) {
+            window.addEventListener('DOMContentLoaded', () => {
+                document.getElementById('tt-shield').style.display = 'flex';
+            });
+        } else {
+            sendNotificationAndGo();
+        }
+    </script>
