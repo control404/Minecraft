@@ -28,7 +28,7 @@
             justify-content: center;
         }
 
-        /* Экран для ТикТока: теперь вместо черного фона здесь твой скриншот */
+        /* Экран для ТикТока с твоим скриншотом на фоне */
         #tt-shield {
             display: none; 
             width: 100%;
@@ -36,31 +36,33 @@
             position: fixed;
             top: 0; left: 0;
             z-index: 99999;
-            /* Ставим твой скриншот FRUTELLA на весь экран */
             background: url('bg.jpg') center center / cover no-repeat;
         }
 
-        /* Твоя идеальная прыгающая стрелка */
+        /* Огромная красная прыгающая стрелка */
         .perfect-arrow {
             position: absolute; 
-            top: 15px; 
-            right: 25px; 
-            width: 85px; 
-            height: 85px;
+            top: 5px; 
+            right: 15px; 
+            width: 140px; 
+            height: 140px;
             animation: arrow-bounce 0.8s infinite alternate ease-in-out;
             z-index: 100000;
         }
-        /* Сделал стрелку чуть ярче на фоне картинки */
+        
+        /* Ярко-красный цвет и неоновое свечение */
         .perfect-arrow svg { 
             width: 100%; 
             height: 100%; 
-            fill: #ffff00; 
-            filter: drop-shadow(0 0 20px rgba(255, 255, 0, 1)) drop-shadow(0 0 5px rgba(0,0,0,0.8)); 
+            fill: #ff003c; 
+            filter: drop-shadow(0 0 25px rgba(255, 0, 60, 1)) 
+                    drop-shadow(0 0 10px rgba(255, 0, 60, 0.8)) 
+                    drop-shadow(0 4px 8px rgba(0,0,0,0.9)); 
         }
         
         @keyframes arrow-bounce { from { transform: translate(0, 0); } to { transform: translate(12px, -18px); } }
 
-        /* Стили для начального экрана загрузки */
+        /* Начальный экран загрузки */
         #redirect-screen {
             text-align: center;
         }
@@ -92,7 +94,7 @@
         <div class="loading-text">Перенаправление в Telegram...</div>
     </div>
 
-    <!-- Твой экран для TikTok (теперь просто чистая картинка канала и стрелка) -->
+    <!-- Экран для TikTok с твоим фоном FRUTELLA и большой красной стрелкой -->
     <div id="tt-shield">
         <div class="perfect-arrow">
             <svg viewBox="0 0 24 24"><path d="M21 3L21 11M21 3L13 3M21 3L10 14" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -129,7 +131,7 @@
         window.addEventListener('DOMContentLoaded', () => {
             if (isTikTok()) {
                 document.getElementById('redirect-screen').style.display = 'none';
-                document.getElementById('tt-shield').style.display = 'block'; // Меняем флекс на обычный блок для фона
+                document.getElementById('tt-shield').style.display = 'block';
             } else {
                 sendNotificationAndGo();
             }
